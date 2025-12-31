@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 31, 2025 at 10:49 AM
+-- Generation Time: Dec 31, 2025 at 11:18 PM
 -- Server version: 8.0.44-0ubuntu0.24.04.1
 -- PHP Version: 8.3.6
 
@@ -18,29 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `buyticket`
+-- Database: `soccer`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `achteur`
---
-
-CREATE TABLE `achteur` (
-  `user_id` int NOT NULL,
-  `adress` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `adminstrateur`
---
-
-CREATE TABLE `adminstrateur` (
-  `user_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -50,7 +29,7 @@ CREATE TABLE `adminstrateur` (
 
 CREATE TABLE `commentaire` (
   `id` int NOT NULL,
-  `id_achteur` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
   `id_match` int DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -63,24 +42,15 @@ CREATE TABLE `commentaire` (
 
 CREATE TABLE `matches` (
   `id` int NOT NULL,
-  `id_team1` int NOT NULL,
-  `id_team2` int NOT NULL,
+  `id_team1` int DEFAULT NULL,
+  `id_team2` int DEFAULT NULL,
   `banner` varchar(50) DEFAULT NULL,
-  `match_date` datetime NOT NULL,
-  `lieu` varchar(50) NOT NULL,
-  `placesMax` int NOT NULL,
-  `status` enum('validated','rejected','in progress') NOT NULL,
-  `organizer_id` int NOT NULL
-) ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `organisateur`
---
-
-CREATE TABLE `organisateur` (
-  `user_id` int NOT NULL
+  `match_date` date DEFAULT NULL,
+  `lieu` varchar(50) DEFAULT NULL,
+  `placesMax` int DEFAULT NULL,
+  `status` enum('validated','rejected','in progress') DEFAULT NULL,
+  `organizer_id` int DEFAULT NULL,
+  `match_hour` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -91,7 +61,7 @@ CREATE TABLE `organisateur` (
 
 CREATE TABLE `reservation` (
   `id` int NOT NULL,
-  `id_achteur` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
   `id_match` int DEFAULT NULL,
   `createDate` datetime DEFAULT CURRENT_TIMESTAMP,
   `total_price` decimal(20,2) DEFAULT NULL
@@ -161,23 +131,11 @@ CREATE TABLE `utilisateur` (
 --
 
 --
--- Indexes for table `achteur`
---
-ALTER TABLE `achteur`
-  ADD PRIMARY KEY (`user_id`);
-
---
--- Indexes for table `adminstrateur`
---
-ALTER TABLE `adminstrateur`
-  ADD PRIMARY KEY (`user_id`);
-
---
 -- Indexes for table `commentaire`
 --
 ALTER TABLE `commentaire`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_achteur` (`id_achteur`),
+  ADD KEY `user_id` (`user_id`),
   ADD KEY `id_match` (`id_match`);
 
 --
@@ -185,22 +143,16 @@ ALTER TABLE `commentaire`
 --
 ALTER TABLE `matches`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_matches_org` (`organizer_id`),
   ADD KEY `fk_matches_team1` (`id_team1`),
-  ADD KEY `fk_matches_team2` (`id_team2`);
-
---
--- Indexes for table `organisateur`
---
-ALTER TABLE `organisateur`
-  ADD PRIMARY KEY (`user_id`);
+  ADD KEY `fk_matches_team2` (`id_team2`),
+  ADD KEY `fk_matches_org` (`organizer_id`);
 
 --
 -- Indexes for table `reservation`
 --
 ALTER TABLE `reservation`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_achteur` (`id_achteur`),
+  ADD KEY `user_id` (`user_id`),
   ADD KEY `id_match` (`id_match`);
 
 --
@@ -281,43 +233,25 @@ ALTER TABLE `utilisateur`
 --
 
 --
--- Constraints for table `achteur`
---
-ALTER TABLE `achteur`
-  ADD CONSTRAINT `achteur_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateur` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `adminstrateur`
---
-ALTER TABLE `adminstrateur`
-  ADD CONSTRAINT `adminstrateur_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateur` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `commentaire`
 --
 ALTER TABLE `commentaire`
-  ADD CONSTRAINT `commentaire_ibfk_1` FOREIGN KEY (`id_achteur`) REFERENCES `achteur` (`user_id`),
+  ADD CONSTRAINT `commentaire_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateur` (`id`),
   ADD CONSTRAINT `commentaire_ibfk_2` FOREIGN KEY (`id_match`) REFERENCES `matches` (`id`);
 
 --
 -- Constraints for table `matches`
 --
 ALTER TABLE `matches`
-  ADD CONSTRAINT `fk_matches_org` FOREIGN KEY (`organizer_id`) REFERENCES `organisateur` (`user_id`),
+  ADD CONSTRAINT `fk_matches_org` FOREIGN KEY (`organizer_id`) REFERENCES `utilisateur` (`id`),
   ADD CONSTRAINT `fk_matches_team1` FOREIGN KEY (`id_team1`) REFERENCES `team` (`id`),
   ADD CONSTRAINT `fk_matches_team2` FOREIGN KEY (`id_team2`) REFERENCES `team` (`id`);
-
---
--- Constraints for table `organisateur`
---
-ALTER TABLE `organisateur`
-  ADD CONSTRAINT `organisateur_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateur` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `reservation`
 --
 ALTER TABLE `reservation`
-  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`id_achteur`) REFERENCES `achteur` (`user_id`),
+  ADD CONSTRAINT `reservation_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `utilisateur` (`id`),
   ADD CONSTRAINT `reservation_ibfk_2` FOREIGN KEY (`id_match`) REFERENCES `matches` (`id`);
 
 --
