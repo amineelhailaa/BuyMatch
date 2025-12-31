@@ -12,4 +12,9 @@ private string $phone;
 private string $status;
 private string $role;
 private string $pic;
+
+public function __construct()
+{
+
+}
 }
