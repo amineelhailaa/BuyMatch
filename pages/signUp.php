@@ -1,3 +1,69 @@
+<?php
+require_once "../auth/authentication.php";
+session_start();
+
+
+try {
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+//        var_dump($_POST['role'] ?? null);
+        $data=$_POST;
+        $data['pic']=null;
+        if(authentication::signUp($data)){
+            header("location: login.php");
+            exit();
+        }
+    }
+}catch (Throwable $exception){
+    echo $exception->getMessage();
+}
+
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -131,7 +197,8 @@
             <!-- Card -->
             <div class="mt-8 mx-auto max-w-md">
                 <form
-                    action="#"
+                        enctype="multipart/form-data"
+                        action="#"
                     method="post"
                     class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6 shadow-[0_30px_90px_rgba(0,0,0,.55)]"
                 >
@@ -151,7 +218,7 @@
                                 data-role="buyer"
                                 aria-label="Buy tickets"
                             >
-                                <input type="radio" name="role" class="sr-only" value="buyer" checked />
+                                <input type="radio" name="role" class="sr-only" value="acheteur" checked />
                                 <div class="text-brand-500">
                                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path
@@ -179,7 +246,7 @@
                                 data-role="organizer"
                                 aria-label="Organize events"
                             >
-                                <input type="radio" name="role" class="sr-only" value="organizer" />
+                                <input type="radio" name="role" class="sr-only" value="organisateur" />
                                 <div class="text-zinc-300 group-[.is-selected]:text-org-500 transition">
                                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path
@@ -229,7 +296,7 @@
                     </span>
                                 <input
                                     id="fullName"
-                                    name="fullName"
+                                    name="nom"
                                     type="text"
                                     placeholder="Enter your full name"
                                     required
@@ -316,27 +383,27 @@
                         </div>
 
                         <!-- Address (USER ONLY) -->
-                        <div id="addressWrap">
-                            <label for="address" class="text-xs font-semibold text-white">Address</label>
-                            <div class="mt-2 relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                <input
-                                    id="address"
-                                    name="address"
-                                    type="text"
-                                    placeholder="Enter your address"
-                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
-                             outline-none transition
-                             focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"
-                                    data-focus-accent="brand"
-                                />
-                            </div>
-                        </div>
+<!--                        <div id="addressWrap">-->
+<!--                            <label for="address" class="text-xs font-semibold text-white">Address</label>-->
+<!--                            <div class="mt-2 relative">-->
+<!--                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">-->
+<!--                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />-->
+<!--                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                      </svg>-->
+<!--                    </span>-->
+<!--                                <input-->
+<!--                                    id="address"-->
+<!--                                    name="address"-->
+<!--                                    type="text"-->
+<!--                                    placeholder="Enter your address"-->
+<!--                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500-->
+<!--                             outline-none transition-->
+<!--                             focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"-->
+<!--                                    data-focus-accent="brand"-->
+<!--                                />-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <!-- Phone -->
                         <div>
@@ -391,7 +458,7 @@
                         </svg>
                         <span id="profileFileLabel" class="text-zinc-400">Upload picture</span>
                       </span>
-                                    <input id="profilePic" name="profilePic" type="file" accept="image/*" class="sr-only" />
+                                    <input id="profilePic" name="pic" type="file" accept="image/*" class="sr-only" />
                                 </label>
                             </div>
                         </div>
@@ -425,6 +492,8 @@
                                     />
                                 </div>
                             </div>
+
+
 
                             <!-- OPTIONAL: Organization logo (matches your screenshot vibe; remove if you don't want it) -->
                             <div>
