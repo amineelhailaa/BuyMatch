@@ -1,9 +1,12 @@
 <?php
 require_once "../auth/authentication.php";
 require_once "../classes/UploadPic.php";
-
 session_start();
-
+if(isset($_SESSION['id'])){
+    header("location: ../index.php"); //to fix after
+    exit();
+}
+//neeeeeeeeeeeeeeed guards
 
 try {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {

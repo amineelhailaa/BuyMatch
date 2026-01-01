@@ -156,7 +156,7 @@
                                 <div class="text-xs font-semibold text-zinc-200">Team A</div>
 
                                 <label class="mt-3 block text-[11px] font-semibold text-zinc-300">Team Name</label>
-                                <input
+                                <input name="teamname[]"
                                     class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white placeholder:text-zinc-500
                              outline-none transition focus:border-brand-500/40 focus:ring-4 focus:ring-brand-500/10"
                                     placeholder="Enter team name"
@@ -181,7 +181,7 @@
                           </svg>
                           Upload
                         </span>
-                                        <input class="hidden" type="file" />
+                                        <input name="teamlogo[]" class="hidden" type="file" />
                                     </label>
                                 </div>
                             </div>

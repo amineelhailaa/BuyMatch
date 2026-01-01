@@ -1,3 +1,31 @@
+<?php
+session_start();
+require_once "../auth/authentication.php";
+
+if(isset($_SESSION['id'])){
+    header("location: ../index.php"); //to fix after
+    exit();
+}
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $error= null;
+    if(authentication::login($_POST["email"], $_POST["password"])){
+        header("location: ");//still need header
+        exit();
+    }
+
+    else{
+        $error = "Wrong email or password"; //need to show it after
+    }
+}
+?>
+
+
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -85,7 +113,7 @@
                 </a>
                 <a
                     class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="#register"
+                    href="signUp.php"
                 >Register</a
                 >
             </nav>
