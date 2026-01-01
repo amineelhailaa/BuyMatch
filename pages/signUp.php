@@ -1,82 +1,43 @@
 <?php
 require_once "../auth/authentication.php";
+require_once "../classes/UploadPic.php";
+
 session_start();
 
 
 try {
-
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //        var_dump($_POST['role'] ?? null);
-        $data=$_POST;
-        $data['pic']=null;
-        if(authentication::signUp($data)){
-            header("location: login.php");
-            exit();
+        $data = $_POST;
+        $data['pic'] = UploadPic::uploadPicture($_FILES['pic']);
+                if (authentication::signUp($data)) {
+                    header("location: login.php");
+                    exit();
+                }
+
+            echo "error sign up";
         }
-    }
-}catch (Throwable $exception){
+} catch (Throwable $exception) {
     echo $exception->getMessage();
 }
-
-
-
 
 
 ?>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>SPORTARENA — Create Account</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap"
+            rel="stylesheet"
     />
 
     <!-- Tailwind CDN -->
@@ -90,8 +51,8 @@ try {
                         display: ["Orbitron", "ui-sans-serif", "system-ui"],
                     },
                     colors: {
-                        brand: { 500: "#FF7A00", 600: "#F36A00" }, // user/buyer orange
-                        org: { 500: "#7C3AED", 600: "#6D28D9" }, // organizer purple
+                        brand: {500: "#FF7A00", 600: "#F36A00"}, // user/buyer orange
+                        org: {500: "#7C3AED", 600: "#6D28D9"}, // organizer purple
                     },
                     boxShadow: {
                         glow: "0 0 0 1px rgba(255,122,0,.25), 0 18px 50px rgba(255,122,0,.14)",
@@ -132,11 +93,11 @@ try {
             <a href="#" class="flex items-center gap-3">
             <span class="grid h-9 w-9 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/30">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" stroke="currentColor" stroke-width="2" class="text-brand-500" />
-                <path d="M6 7H4a2 2 0 0 0 2 5h1" stroke="currentColor" stroke-width="2" class="text-brand-500" />
-                <path d="M18 7h2a2 2 0 0 1-2 5h-1" stroke="currentColor" stroke-width="2" class="text-brand-500" />
-                <path d="M12 11v3m-4 6h8" stroke="currentColor" stroke-width="2" class="text-brand-500" />
-                <path d="M10 20v-3h4v3" stroke="currentColor" stroke-width="2" class="text-brand-500" />
+                <path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
+                <path d="M6 7H4a2 2 0 0 0 2 5h1" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
+                <path d="M18 7h2a2 2 0 0 1-2 5h-1" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
+                <path d="M12 11v3m-4 6h8" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
+                <path d="M10 20v-3h4v3" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
               </svg>
             </span>
                 <span class="flex items-baseline gap-1 font-display tracking-wide">
@@ -152,21 +113,21 @@ try {
                     <span aria-hidden="true">↗</span> Login
                 </a>
                 <a
-                    class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="#register"
-                    aria-current="page"
+                        class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                        href="#register"
+                        aria-current="page"
                 >Register</a
                 >
             </nav>
 
             <button
-                id="menuBtn"
-                class="md:hidden inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition"
-                aria-label="Open menu"
-                aria-expanded="false"
+                    id="menuBtn"
+                    class="md:hidden inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition"
+                    aria-label="Open menu"
+                    aria-expanded="false"
             >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" />
+                    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2"/>
                 </svg>
             </button>
         </div>
@@ -177,9 +138,9 @@ try {
                 <a class="hover:text-white transition" href="#matches">Matches</a>
                 <a class="hover:text-white transition" href="#login">Login</a>
                 <a
-                    id="navRegisterMobile"
-                    class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="#register"
+                        id="navRegisterMobile"
+                        class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                        href="#register"
                 >Register</a
                 >
             </div>
@@ -199,8 +160,8 @@ try {
                 <form
                         enctype="multipart/form-data"
                         action="#"
-                    method="post"
-                    class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6 shadow-[0_30px_90px_rgba(0,0,0,.55)]"
+                        method="post"
+                        class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6 shadow-[0_30px_90px_rgba(0,0,0,.55)]"
                 >
                     <!-- Role toggle -->
                     <div class="text-left">
@@ -209,24 +170,25 @@ try {
                         <div class="mt-3 grid grid-cols-2 gap-3">
                             <!-- Buyer -->
                             <label
-                                class="role-card group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border px-4 py-4 outline-none
+                                    class="role-card group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border px-4 py-4 outline-none
                            border-brand-500/45 bg-brand-500/10 shadow-[0_0_0_1px_rgba(255,122,0,.12)]
                            transition duration-200
                            hover:-translate-y-[1px] hover:border-brand-500/70 hover:shadow-glow
                            focus:ring-2 focus:ring-brand-500/25"
-                                tabindex="0"
-                                data-role="buyer"
-                                aria-label="Buy tickets"
+                                    tabindex="0"
+                                    data-role="buyer"
+                                    aria-label="Buy tickets"
                             >
-                                <input type="radio" name="role" class="sr-only" value="acheteur" checked />
+                                <input type="radio" name="role" class="sr-only" value="acheteur" checked/>
                                 <div class="text-brand-500">
                                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path
-                                            d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z"
-                                            stroke="currentColor"
-                                            stroke-width="2"
+                                                d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z"
+                                                stroke="currentColor"
+                                                stroke-width="2"
                                         />
-                                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
+                                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor"
+                                              stroke-width="2"/>
                                     </svg>
                                 </div>
                                 <div class="text-sm font-semibold text-brand-500">Buy Tickets</div>
@@ -237,44 +199,45 @@ try {
 
                             <!-- Organizer -->
                             <label
-                                class="role-card group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border px-4 py-4 outline-none
+                                    class="role-card group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border px-4 py-4 outline-none
                            border-white/10 bg-white/5
                            transition duration-200
                            hover:-translate-y-[1px] hover:border-org-500/25 hover:bg-white/8 hover:shadow-[0_0_0_1px_rgba(124,58,237,.12),0_22px_55px_rgba(0,0,0,.55)]
                            focus:ring-2 focus:ring-org-500/25"
-                                tabindex="0"
-                                data-role="organizer"
-                                aria-label="Organize events"
+                                    tabindex="0"
+                                    data-role="organizer"
+                                    aria-label="Organize events"
                             >
-                                <input type="radio" name="role" class="sr-only" value="organisateur" />
+                                <input type="radio" name="role" class="sr-only" value="organisateur"/>
                                 <div class="text-zinc-300 group-[.is-selected]:text-org-500 transition">
                                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path
-                                            d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
+                                                d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
                                         />
                                         <path
-                                            d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
-                                            stroke="currentColor"
-                                            stroke-width="2"
+                                                d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+                                                stroke="currentColor"
+                                                stroke-width="2"
                                         />
                                         <path
-                                            d="M22 21v-2a4 4 0 0 0-3-3.87"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
+                                                d="M22 21v-2a4 4 0 0 0-3-3.87"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
                                         />
                                         <path
-                                            d="M16 3.13a4 4 0 0 1 0 7.75"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
+                                                d="M16 3.13a4 4 0 0 1 0 7.75"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
                                         />
                                     </svg>
                                 </div>
-                                <div class="text-sm font-semibold text-white transition role-title">Organize Events</div>
+                                <div class="text-sm font-semibold text-white transition role-title">Organize Events
+                                </div>
                                 <div class="text-[11px] text-zinc-400 transition role-sub">Create & manage</div>
 
                                 <span class="pointer-events-none absolute inset-0 rounded-xl ring-0 ring-org-500/25 group-has-[:focus-visible]:ring-2"></span>
@@ -290,20 +253,20 @@ try {
                             <div class="mt-2 relative">
                     <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
+                        <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2"/>
                       </svg>
                     </span>
                                 <input
-                                    id="fullName"
-                                    name="nom"
-                                    type="text"
-                                    placeholder="Enter your full name"
-                                    required
-                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
+                                        id="fullName"
+                                        name="nom"
+                                        type="text"
+                                        placeholder="Enter your full name"
+                                        required
+                                        class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
                              outline-none transition
                              focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"
-                                    data-focus-accent="brand"
+                                        data-focus-accent="brand"
                                 />
                             </div>
                         </div>
@@ -314,21 +277,22 @@ try {
                             <div class="mt-2 relative">
                     <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round"/>
                       </svg>
                     </span>
                                 <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autocomplete="email"
-                                    placeholder="Enter your email"
-                                    required
-                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        autocomplete="email"
+                                        placeholder="Enter your email"
+                                        required
+                                        class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
                              outline-none transition
                              focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"
-                                    data-focus-accent="brand"
+                                        data-focus-accent="brand"
                                 />
                             </div>
                         </div>
@@ -339,71 +303,82 @@ try {
                             <div class="mt-2 relative">
                     <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M6 11h12v10H6V11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                        <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2"
+                              stroke-linecap="round"/>
+                        <path d="M6 11h12v10H6V11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                       </svg>
                     </span>
 
                                 <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autocomplete="new-password"
-                                    placeholder="Create a strong password"
-                                    required
-                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-11 text-sm text-white placeholder:text-zinc-500
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="new-password"
+                                        placeholder="Create a strong password"
+                                        required
+                                        class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-11 text-sm text-white placeholder:text-zinc-500
                              outline-none transition
                              focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"
-                                    data-focus-accent="brand"
+                                        data-focus-accent="brand"
                                 />
 
                                 <button
-                                    id="togglePassword"
-                                    type="button"
-                                    class="absolute inset-y-0 right-3 inline-flex items-center justify-center rounded-lg px-2 text-zinc-400
+                                        id="togglePassword"
+                                        type="button"
+                                        class="absolute inset-y-0 right-3 inline-flex items-center justify-center rounded-lg px-2 text-zinc-400
                              transition hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/25"
-                                    aria-label="Toggle password visibility"
-                                    aria-pressed="false"
-                                    data-focus-accent="brand"
+                                        aria-label="Toggle password visibility"
+                                        aria-pressed="false"
+                                        data-focus-accent="brand"
                                 >
                                     <!-- eye -->
-                                    <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" />
+                                    <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                         aria-hidden="true">
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor"
+                                              stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor"
+                                              stroke-width="2"/>
                                     </svg>
                                     <!-- eye-off -->
-                                    <svg id="eyeOffIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M3 3l18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                        <path d="M10.6 10.6a2.8 2.8 0 0 0 3.8 3.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                        <path d="M7.1 7.1C4.1 9 2 12 2 12s3.5 7 10 7c2 0 3.7-.5 5.1-1.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M9.9 5.2A10.6 10.6 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-2.9 4.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <svg id="eyeOffIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" aria-hidden="true">
+                                        <path d="M3 3l18 18" stroke="currentColor" stroke-width="2"
+                                              stroke-linecap="round"/>
+                                        <path d="M10.6 10.6a2.8 2.8 0 0 0 3.8 3.8" stroke="currentColor"
+                                              stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M7.1 7.1C4.1 9 2 12 2 12s3.5 7 10 7c2 0 3.7-.5 5.1-1.2"
+                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                              stroke-linejoin="round"/>
+                                        <path d="M9.9 5.2A10.6 10.6 0 0 1 12 5c6.5 0 10 7 10 7a18 18 0 0 1-2.9 4.1"
+                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                              stroke-linejoin="round"/>
                                     </svg>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Address (USER ONLY) -->
-<!--                        <div id="addressWrap">-->
-<!--                            <label for="address" class="text-xs font-semibold text-white">Address</label>-->
-<!--                            <div class="mt-2 relative">-->
-<!--                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">-->
-<!--                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />-->
-<!--                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />-->
-<!--                      </svg>-->
-<!--                    </span>-->
-<!--                                <input-->
-<!--                                    id="address"-->
-<!--                                    name="address"-->
-<!--                                    type="text"-->
-<!--                                    placeholder="Enter your address"-->
-<!--                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500-->
-<!--                             outline-none transition-->
-<!--                             focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"-->
-<!--                                    data-focus-accent="brand"-->
-<!--                                />-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <!--                        <div id="addressWrap">-->
+                        <!--                            <label for="address" class="text-xs font-semibold text-white">Address</label>-->
+                        <!--                            <div class="mt-2 relative">-->
+                        <!--                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">-->
+                        <!--                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+                        <!--                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />-->
+                        <!--                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />-->
+                        <!--                      </svg>-->
+                        <!--                    </span>-->
+                        <!--                                <input-->
+                        <!--                                    id="address"-->
+                        <!--                                    name="address"-->
+                        <!--                                    type="text"-->
+                        <!--                                    placeholder="Enter your address"-->
+                        <!--                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500-->
+                        <!--                             outline-none transition-->
+                        <!--                             focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"-->
+                        <!--                                    data-focus-accent="brand"-->
+                        <!--                                />-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
 
                         <!-- Phone -->
                         <div>
@@ -412,23 +387,23 @@ try {
                     <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path
-                            d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L8.1 9.4a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6A2 2 0 0 1 22 16.9Z"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                                d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L8.1 9.4a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6A2 2 0 0 1 22 16.9Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
                         />
                       </svg>
                     </span>
                                 <input
-                                    id="phone"
-                                    name="phone"
-                                    type="tel"
-                                    placeholder="Enter your phone"
-                                    class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
+                                        id="phone"
+                                        name="phone"
+                                        type="tel"
+                                        placeholder="Enter your phone"
+                                        class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
                              outline-none transition
                              focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"
-                                    data-focus-accent="brand"
+                                        data-focus-accent="brand"
                                 />
                             </div>
                         </div>
@@ -439,26 +414,30 @@ try {
                             <div class="mt-2 flex items-center gap-3">
                                 <div class="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-400">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                        <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor"
+                                              stroke-width="2"/>
+                                        <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2"
+                                              stroke-linecap="round"/>
                                     </svg>
                                 </div>
 
                                 <label
-                                    class="flex-1 cursor-pointer rounded-xl border border-white/10 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300
+                                        class="flex-1 cursor-pointer rounded-xl border border-white/10 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300
                              transition hover:bg-zinc-900/55 hover:border-white/15
                              focus-within:ring-2 focus-within:ring-brand-500/15"
-                                    id="profileUploadWrap"
+                                        id="profileUploadWrap"
                                 >
                       <span class="inline-flex items-center gap-2">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="text-zinc-400">
-                          <path d="M12 16V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                          <path d="M7 9l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                          <path d="M20 20H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                             class="text-zinc-400">
+                          <path d="M12 16V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M7 9l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"/>
+                          <path d="M20 20H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                         <span id="profileFileLabel" class="text-zinc-400">Upload picture</span>
                       </span>
-                                    <input id="profilePic" name="pic" type="file" accept="image/*" class="sr-only" />
+                                    <input id="profilePic" name="pic" type="file" accept="image/*" class="sr-only"/>
                                 </label>
                             </div>
                         </div>
@@ -475,24 +454,25 @@ try {
                                 <div class="mt-2 relative">
                       <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-zinc-400">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                          <path d="M7 21V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                          <path d="M10 9h4M10 13h4M10 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                          <path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                          <path d="M7 21V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14" stroke="currentColor" stroke-width="2"
+                                stroke-linejoin="round"/>
+                          <path d="M10 9h4M10 13h4M10 17h4" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round"/>
                         </svg>
                       </span>
                                     <input
-                                        id="orgName"
-                                        name="orgName"
-                                        type="text"
-                                        placeholder="Enter your organization name"
-                                        class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
+                                            id="orgName"
+                                            name="orgName"
+                                            type="text"
+                                            placeholder="Enter your organization name"
+                                            class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
                                outline-none transition
                                focus:border-org-500/40 focus:ring-2 focus:ring-org-500/15"
-                                        data-focus-accent="org"
+                                            data-focus-accent="org"
                                     />
                                 </div>
                             </div>
-
 
 
                             <!-- OPTIONAL: Organization logo (matches your screenshot vibe; remove if you don't want it) -->
@@ -501,27 +481,33 @@ try {
                                 <div class="mt-2 flex items-center gap-3">
                                     <div class="grid h-12 w-12 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-400">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                            <path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                            <path d="M7 21V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                                            <path d="M10 9h4M10 13h4M10 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                            <path d="M3 21h18" stroke="currentColor" stroke-width="2"
+                                                  stroke-linecap="round"/>
+                                            <path d="M7 21V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14" stroke="currentColor"
+                                                  stroke-width="2" stroke-linejoin="round"/>
+                                            <path d="M10 9h4M10 13h4M10 17h4" stroke="currentColor" stroke-width="2"
+                                                  stroke-linecap="round"/>
                                         </svg>
                                     </div>
 
                                     <label
-                                        class="flex-1 cursor-pointer rounded-xl border border-white/10 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300
+                                            class="flex-1 cursor-pointer rounded-xl border border-white/10 bg-zinc-900/40 px-4 py-3 text-sm text-zinc-300
                                transition hover:bg-zinc-900/55 hover:border-white/15
                                focus-within:ring-2 focus-within:ring-org-500/15"
-                                        id="orgUploadWrap"
+                                            id="orgUploadWrap"
                                     >
                         <span class="inline-flex items-center gap-2">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="text-zinc-400">
-                            <path d="M12 16V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                            <path d="M7 9l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M20 20H4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+                               class="text-zinc-400">
+                            <path d="M12 16V4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 9l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                  stroke-linejoin="round"/>
+                            <path d="M20 20H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                           </svg>
                           <span id="orgFileLabel" class="text-zinc-400">Upload logo</span>
                         </span>
-                                        <input id="orgLogo" name="orgLogo" type="file" accept="image/*" class="sr-only" />
+                                        <input id="orgLogo" name="orgLogo" type="file" accept="image/*"
+                                               class="sr-only"/>
                                     </label>
                                 </div>
                             </div>
@@ -530,9 +516,9 @@ try {
 
                     <!-- CTA -->
                     <button
-                        id="createBtn"
-                        type="submit"
-                        class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-5 py-4
+                            id="createBtn"
+                            type="submit"
+                            class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-5 py-4
                        text-sm font-semibold text-zinc-950 shadow-glow
                        transition duration-200
                        hover:bg-brand-600 hover:-translate-y-[1px]
@@ -544,9 +530,9 @@ try {
                     <p class="mt-5 text-center text-xs text-zinc-400">
                         Already have an account?
                         <a
-                            id="signinLink"
-                            href="#"
-                            class="font-semibold text-brand-500 transition hover:text-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500/25 rounded"
+                                id="signinLink"
+                                href="#"
+                                class="font-semibold text-brand-500 transition hover:text-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500/25 rounded"
                         >Sign in</a
                         >
                     </p>
@@ -562,9 +548,10 @@ try {
                         <div class="flex items-center gap-3">
                   <span class="grid h-9 w-9 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/30">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" stroke="currentColor" stroke-width="2" class="text-brand-500" />
-                      <path d="M6 7H4a2 2 0 0 0 2 5h1" stroke="currentColor" stroke-width="2" class="text-brand-500" />
-                      <path d="M18 7h2a2 2 0 0 1-2 5h-1" stroke="currentColor" stroke-width="2" class="text-brand-500" />
+                      <path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" stroke="currentColor" stroke-width="2"
+                            class="text-brand-500"/>
+                      <path d="M6 7H4a2 2 0 0 0 2 5h1" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
+                      <path d="M18 7h2a2 2 0 0 1-2 5h-1" stroke="currentColor" stroke-width="2" class="text-brand-500"/>
                     </svg>
                   </span>
                             <span class="flex items-baseline gap-1 font-display tracking-wide">
@@ -573,7 +560,8 @@ try {
                   </span>
                         </div>
                         <p class="mt-4 text-sm text-zinc-400 leading-relaxed">
-                            The ultimate platform for sports events. Buy tickets, organize matches, and experience the thrill of live sports.
+                            The ultimate platform for sports events. Buy tickets, organize matches, and experience the
+                            thrill of live sports.
                         </p>
                     </div>
 
@@ -601,8 +589,8 @@ try {
                             <li class="flex items-center gap-3">
                     <span class="text-brand-500">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                       </svg>
                     </span>
                                 support@sportarena.com
@@ -611,11 +599,11 @@ try {
                     <span class="text-brand-500">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path
-                            d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L8.1 9.4a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6A2 2 0 0 1 22 16.9Z"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                                d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L8.1 9.4a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6A2 2 0 0 1 22 16.9Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
                         />
                       </svg>
                     </span>
@@ -624,8 +612,9 @@ try {
                             <li class="flex items-center gap-3">
                     <span class="text-brand-500">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
+                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor"
+                              stroke-width="2"/>
+                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2"/>
                       </svg>
                     </span>
                                 123 Stadium Way, Sports City
@@ -642,9 +631,9 @@ try {
 
         <!-- Built with badge -->
         <button
-            id="builtWith"
-            class="fixed bottom-6 right-6 z-50 rounded-xl border border-white/10 bg-zinc-950/70 px-4 py-2 text-xs text-zinc-200 shadow-lg backdrop-blur hover:bg-zinc-900/70 transition"
-            type="button"
+                id="builtWith"
+                class="fixed bottom-6 right-6 z-50 rounded-xl border border-white/10 bg-zinc-950/70 px-4 py-2 text-xs text-zinc-200 shadow-lg backdrop-blur hover:bg-zinc-900/70 transition"
+                type="button"
         >
             Built with <span aria-hidden="true">♥</span>
             <span class="ml-1 text-brand-500 font-semibold">Tailwind</span>
