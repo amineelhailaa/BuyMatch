@@ -9,6 +9,8 @@ require_once "../../classes/UploadPic.php";
 //khsni redirect hna
 
 
+$organizer_id= $_SESSION['user_id'];
+
 try {
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -23,7 +25,7 @@ try {
         }
     $banner = UploadPic::uploadPicture($_FILES['banner']);
         $submitMatch =  new MatchRepository($con);
-        $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST[''])
+        $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesMax'],$organizer_id);
 
 
 
