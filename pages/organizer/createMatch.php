@@ -1,3 +1,68 @@
+<?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+require_once "../../config/database.php";
+require_once "../../repo/TeamRepository.php";
+require_once "../../classes/UploadPic.php";
+//khsni redirect hna
+
+
+try {
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $con = Database::getConnection();
+        $createTeams = new TeamRepository($con);
+
+        if(isset($_FILES['teamlogo1']) && isset($_FILES['teamlogo2'])){
+          $team1 = $createTeams->createTeam($_POST['teamname1'],UploadPic::uploadPicture($_FILES['teamlogo1']));
+          $team2 = $createTeams->createTeam($_POST['teamname2'],UploadPic::uploadPicture($_FILES['teamlogo2']));
+        }else{
+            throw new Exception("No file uploaded");
+        }
+    $banner = UploadPic::uploadPicture($_FILES['banner']);
+        $submitMatch =  new MatchRepository($con);
+        $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST[''])
+
+
+
+
+
+
+
+
+
+
+
+    }
+}catch (Throwable $e){
+    echo "Error: " . $e->getMessage();
+}
+
+
+
+
+
+
+
+
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -133,7 +198,7 @@
             </div>
 
             <div class="mt-8 flex justify-center">
-                <form
+                <form method="post" enctype="multipart/form-data"
                     class="w-full max-w-xl rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3
                      shadow-[0_22px_55px_rgba(0,0,0,.55)]"
                 >
@@ -156,7 +221,7 @@
                                 <div class="text-xs font-semibold text-zinc-200">Team A</div>
 
                                 <label class="mt-3 block text-[11px] font-semibold text-zinc-300">Team Name</label>
-                                <input name="teamname[]"
+                                <input name="teamname1"
                                     class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white placeholder:text-zinc-500
                              outline-none transition focus:border-brand-500/40 focus:ring-4 focus:ring-brand-500/10"
                                     placeholder="Enter team name"
@@ -181,7 +246,7 @@
                           </svg>
                           Upload
                         </span>
-                                        <input name="teamlogo[]" class="hidden" type="file" />
+                                        <input name="teamlogo1" class="hidden" type="file" />
                                     </label>
                                 </div>
                             </div>
@@ -191,7 +256,7 @@
                                 <div class="text-xs font-semibold text-zinc-200">Team B</div>
 
                                 <label class="mt-3 block text-[11px] font-semibold text-zinc-300">Team Name</label>
-                                <input
+                                <input name="teamname2"
                                     class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white placeholder:text-zinc-500
                              outline-none transition focus:border-brand-500/40 focus:ring-4 focus:ring-brand-500/10"
                                     placeholder="Enter team name"
@@ -216,7 +281,7 @@
                           </svg>
                           Upload
                         </span>
-                                        <input class="hidden" type="file" />
+                                        <input name="teamlogo2" class="hidden" type="file" />
                                     </label>
                                 </div>
                             </div>
@@ -255,7 +320,7 @@
                                         <path d="M4 20h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
                                     Choose File
-                                    <input class="hidden" type="file" />
+                                    <input name="banner" class="hidden" type="file" />
                                 </label>
                             </div>
                         </div>
@@ -283,7 +348,7 @@
                             <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
                           </svg>
                         </span>
-                                        <input
+                                        <input name="date"
                                             type="text"
                                             placeholder="mm/dd/yyyy"
                                             class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-10 pr-3 text-sm text-white placeholder:text-zinc-500
@@ -301,7 +366,7 @@
                             <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" stroke-width="2" />
                           </svg>
                         </span>
-                                        <input
+                                        <input name="hour"
                                             type="text"
                                             placeholder="--:--"
                                             class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-10 pr-3 text-sm text-white placeholder:text-zinc-500
@@ -319,7 +384,7 @@
                             <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
                           </svg>
                         </span>
-                                        <input
+                                        <input name="lieu"
                                             type="text"
                                             placeholder="Enter venue name"
                                             class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-10 pr-3 text-sm text-white placeholder:text-zinc-500
@@ -337,7 +402,7 @@
                             <path d="M20 21a7 7 0 0 0-14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                           </svg>
                         </span>
-                                        <input
+                                        <input name="placesmax"
                                             type="number"
                                             value="2000"
                                             class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-10 pr-3 text-sm text-white placeholder:text-zinc-500
@@ -383,7 +448,7 @@
                                     <div class="mt-3 grid gap-3 md:grid-cols-3">
                                         <div>
                                             <label class="block text-[11px] font-semibold text-zinc-300">Name</label>
-                                            <input
+                                            <input name="label[]"
                                                 type="text"
                                                 placeholder="e.g., Normal"
                                                 class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white placeholder:text-zinc-500
@@ -394,7 +459,7 @@
                                             <label class="block text-[11px] font-semibold text-zinc-300">Price ($)</label>
                                             <div class="relative mt-2">
                                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-zinc-500">$</span>
-                                                <input
+                                                <input name="price[]"
                                                     type="number"
                                                     value="50"
                                                     class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-8 pr-3 text-sm text-white
@@ -404,7 +469,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-[11px] font-semibold text-zinc-300">Seats Max</label>
-                                            <input
+                                            <input name="maxseats[]"
                                                 type="number"
                                                 value="500"
                                                 class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white
@@ -421,7 +486,7 @@
                                     <div class="mt-3 grid gap-3 md:grid-cols-3">
                                         <div>
                                             <label class="block text-[11px] font-semibold text-zinc-300">Name</label>
-                                            <input
+                                            <input name="label[]"
                                                 type="text"
                                                 placeholder="e.g., Premium"
                                                 class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white placeholder:text-zinc-500
@@ -432,7 +497,7 @@
                                             <label class="block text-[11px] font-semibold text-zinc-300">Price ($)</label>
                                             <div class="relative mt-2">
                                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-zinc-500">$</span>
-                                                <input
+                                                <input name="price[]"
                                                     type="number"
                                                     value="120"
                                                     class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-8 pr-3 text-sm text-white
@@ -442,7 +507,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-[11px] font-semibold text-zinc-300">Seats Max</label>
-                                            <input
+                                            <input name="maxseats[]"
                                                 type="number"
                                                 value="200"
                                                 class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white
@@ -459,7 +524,7 @@
                                     <div class="mt-3 grid gap-3 md:grid-cols-3">
                                         <div>
                                             <label class="block text-[11px] font-semibold text-zinc-300">Name</label>
-                                            <input
+                                            <input name="label[]"
                                                 type="text"
                                                 placeholder="e.g., VIP"
                                                 class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white placeholder:text-zinc-500
@@ -470,7 +535,7 @@
                                             <label class="block text-[11px] font-semibold text-zinc-300">Price ($)</label>
                                             <div class="relative mt-2">
                                                 <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-zinc-500">$</span>
-                                                <input
+                                                <input name="price[]"
                                                     type="number"
                                                     value="250"
                                                     class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-8 pr-3 text-sm text-white
@@ -480,7 +545,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-[11px] font-semibold text-zinc-300">Seats Max</label>
-                                            <input
+                                            <input name="maxseats[]"
                                                 type="number"
                                                 value="50"
                                                 class="mt-2 w-full rounded-xl border border-white/10 bg-zinc-900/35 px-3 py-2 text-sm text-white
@@ -496,7 +561,7 @@
                     <!-- Submit -->
                     <div class="p-6 pt-0">
                         <button
-                            type="button"
+                            type="submit"
                             class="w-full rounded-xl bg-purple-500 px-5 py-3 text-sm font-semibold text-white
                          shadow-[0_0_0_1px_rgba(124,58,237,.25),0_18px_50px_rgba(124,58,237,.14)]
                          transition hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-500/20"

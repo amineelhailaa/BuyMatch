@@ -3,6 +3,9 @@
 
 class UploadPic
 {
+    /**
+     * @throws Exception
+     */
     public static function validate($image): void
     {
         if(!isset($image) || $image["error"]!=0){
@@ -11,6 +14,9 @@ class UploadPic
     }
 
 
+    /**
+     * @throws Exception
+     */
     public static function uploadPicture($image)
     {
         self::validate($image);
