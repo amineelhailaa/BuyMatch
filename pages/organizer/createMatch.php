@@ -6,26 +6,40 @@ ini_set('display_startup_errors', 1);
 require_once "../../config/database.php";
 require_once "../../repo/TeamRepository.php";
 require_once "../../classes/UploadPic.php";
+require_once "../../classes/Team.php";
+require_once "../../repo/MatchRepository.php";
+require_once "../../repo/CategoryRepository.php";
 //khsni redirect hna
 
-
-$organizer_id= $_SESSION['user_id'];
+//$organizer_id= $_SESSION['user_id'];
+$organizer_id= 3; //for testing
 
 try {
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $con = Database::getConnection();
         $createTeams = new TeamRepository($con);
-
         if(isset($_FILES['teamlogo1']) && isset($_FILES['teamlogo2'])){
-          $team1 = $createTeams->createTeam($_POST['teamname1'],UploadPic::uploadPicture($_FILES['teamlogo1']));
-          $team2 = $createTeams->createTeam($_POST['teamname2'],UploadPic::uploadPicture($_FILES['teamlogo2']));
+            $logo1 =UploadPic::uploadPicture($_FILES['teamlogo1']);
+            $logo2 =UploadPic::uploadPicture($_FILES['teamlogo2']);
+//            $team1 = new Team($_POST['teamname1'],$logo1);
+//            $team2 = new Team($_POST['teamname2'],$logo2);
+          $team1 = $createTeams->createTeam(new Team($_POST['teamname1'],$logo1));
+          $team2 = $createTeams->createTeam(new Team($_POST['teamname2'],$logo2));
+//         $team1 = $createTeams->createTeam($_POST['teamname1'],UploadPic::uploadPicture($_FILES['teamlogo1']));
+//          $team2 = $createTeams->createTeam($_POST['teamname2'],UploadPic::uploadPicture($_FILES['teamlogo2']));
         }else{
             throw new Exception("No file uploaded");
         }
     $banner = UploadPic::uploadPicture($_FILES['banner']);
         $submitMatch =  new MatchRepository($con);
-        $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesMax'],$organizer_id);
+        $match_id = $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesmax'],$organizer_id);
+        $submitCategory =  new CategoryRepository($con);
+        for ( $i=0 ; $i<count($_POST['label']) ; $i++ ){
+            $submitCategory->createCategory($match_id,$_POST['label'][$i],$_POST['price'][$i],$_POST['maxseats'][$i]);
+
+
+        }
 
 
 
@@ -351,7 +365,7 @@ try {
                           </svg>
                         </span>
                                         <input name="date"
-                                            type="text"
+                                            type="date"
                                             placeholder="mm/dd/yyyy"
                                             class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-10 pr-3 text-sm text-white placeholder:text-zinc-500
                                  outline-none transition focus:border-brand-500/40 focus:ring-4 focus:ring-brand-500/10"
@@ -369,7 +383,7 @@ try {
                           </svg>
                         </span>
                                         <input name="hour"
-                                            type="text"
+                                            type="time"
                                             placeholder="--:--"
                                             class="w-full rounded-xl border border-white/10 bg-zinc-900/35 py-2 pl-10 pr-3 text-sm text-white placeholder:text-zinc-500
                                  outline-none transition focus:border-brand-500/40 focus:ring-4 focus:ring-brand-500/10"
