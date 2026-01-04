@@ -1,3 +1,34 @@
+<?php
+require_once "../../classes/MatchSummary.php";
+require_once "../../config/database.php";
+require_once "../../repo/MatchRepository.php";
+
+$repo= new MatchRepository(Database::getConnection());
+
+
+try{
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
+        $match_id = $_POST['match'];
+        if($_POST['action']==='approve'){
+            $status="validated";
+            $repo->updateMatchStatus($match_id,$status);
+        }
+        else if($_POST['action']==='decline'){
+            $status="rejected";
+            $repo->updateMatchStatus($match_id,$status);
+        }
+        else {
+            throw new Exception("Invalid request method");
+        }
+    }
+}catch(Throwable $exception){
+    echo $exception->getMessage();
+}
+$matchList = $repo->pendingMatches();
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -142,22 +173,27 @@
                 <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
               </svg>
             </span>
-                <span><span class="font-semibold text-white">3</span> pending requests</span>
+                <span> pending requests</span>
             </div>
 
             <!-- Cards (ALL like the first one) -->
             <div class="mt-6 grid gap-5 md:grid-cols-3">
                 <!-- Card 1 (with banner image) -->
+                <?php
+                        foreach ($matchList as $match):
+                ?>
+
                 <article
                     class="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3
                      shadow-[0_22px_55px_rgba(0,0,0,.55)]
                      transition hover:-translate-y-[1px] hover:border-brand-500/25"
                 >
+
                     <!-- Banner -->
                     <div class="relative h-28 w-full">
                         <img
-                            src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1400&q=60"
-                            alt=""
+                            src="../../uploads/<?= $match->getBanner() ?>"
+                            alt="banner is not working"
                             class="h-full w-full object-cover opacity-90"
                         />
                         <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-zinc-950/85"></div>
@@ -182,8 +218,8 @@
                         </div>
 
                         <div class="mt-3 flex items-center justify-center gap-10 text-xs text-zinc-200">
-                            <div class="font-semibold">AC Milan</div>
-                            <div class="font-semibold">Inter Milan</div>
+                            <div class="font-semibold"><?= $match->getTeam1Name() ?></div>
+                            <div class="font-semibold"><?= $match->getTeam2Name() ?></div>
                         </div>
 
                         <!-- Meta list -->
@@ -195,7 +231,7 @@
                         <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
                       </svg>
                     </span>
-                                February 10, 2025
+                                <?= $match->getDate() ?>
                             </div>
 
                             <div class="flex items-center gap-2">
@@ -205,9 +241,8 @@
                         <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
                       </svg>
                     </span>
-                                San Siro
+                                <?= $match->getLocation() ?>
                             </div>
-
                             <div class="flex items-center gap-2">
                     <span class="text-brand-500">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -220,9 +255,13 @@
                         </div>
 
                         <!-- Actions -->
+                        <form method="post" action="">
+                            <input type="hidden" name="match" value="<?=$match->getMatchId()?>">
                         <div class="mt-5 grid grid-cols-2 gap-3">
+
                             <button
-                                type="button"
+                                    name="action" value="approve"
+                                type="submit"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl border border-ok-500/30 bg-ok-500/15 px-4 py-3 text-sm font-semibold text-ok-500
                            transition hover:bg-ok-500/20 hover:border-ok-500/40
                            focus:outline-none focus:ring-2 focus:ring-ok-500/20"
@@ -230,184 +269,22 @@
                                 <span aria-hidden="true">✓</span> Approve
                             </button>
                             <button
-                                type="button"
+                                    name="action" value="decline"
+                                type="submit"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl border border-danger-500/30 bg-danger-500/15 px-4 py-3 text-sm font-semibold text-danger-500
                            transition hover:bg-danger-500/20 hover:border-danger-500/40
                            focus:outline-none focus:ring-2 focus:ring-danger-500/20"
                             >
                                 <span aria-hidden="true">×</span> Decline
                             </button>
-                        </div>
+                        </div></form>
                     </div>
                 </article>
 
-                <!-- Card 2 (same style, EMPTY banner src but keep placeholder background) -->
-                <article
-                    class="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3
-                     shadow-[0_22px_55px_rgba(0,0,0,.55)]
-                     transition hover:-translate-y-[1px] hover:border-brand-500/25"
-                >
-                    <!-- Banner placeholder (empty src + background) -->
-                    <div class="relative h-28 w-full">
-                        <img src="" alt="" class="hidden" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-zinc-900/30 via-zinc-800/20 to-zinc-900/30"></div>
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,122,0,.16),transparent_55%),radial-gradient(circle_at_70%_40%,rgba(99,102,241,.12),transparent_55%)]"></div>
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-zinc-950/85"></div>
-                        <div class="absolute left-4 top-4 text-xs text-zinc-300/80">Match banner</div>
-                    </div>
+                <?php
+                endforeach;
+                ?>
 
-                    <div class="p-5">
-                        <div class="flex items-center justify-center gap-4">
-                            <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200" title="Juventus">
-                                JUV
-                            </div>
-                            <div class="font-display text-brand-500 text-lg tracking-widest">VS</div>
-                            <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200" title="Napoli">
-                                NAP
-                            </div>
-                        </div>
-
-                        <div class="mt-3 flex items-center justify-center gap-10 text-xs text-zinc-200">
-                            <div class="font-semibold">Juventus</div>
-                            <div class="font-semibold">Napoli</div>
-                        </div>
-
-                        <div class="mt-5 space-y-2 text-sm text-zinc-400">
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                February 15, 2025
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                Allianz Stadium
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      </svg>
-                    </span>
-                                Organizer: Italia Sports Co.
-                            </div>
-                        </div>
-
-                        <div class="mt-5 grid grid-cols-2 gap-3">
-                            <button
-                                type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-ok-500/30 bg-ok-500/15 px-4 py-3 text-sm font-semibold text-ok-500
-                           transition hover:bg-ok-500/20 hover:border-ok-500/40
-                           focus:outline-none focus:ring-2 focus:ring-ok-500/20"
-                            >
-                                <span aria-hidden="true">✓</span> Approve
-                            </button>
-                            <button
-                                type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-danger-500/30 bg-danger-500/15 px-4 py-3 text-sm font-semibold text-danger-500
-                           transition hover:bg-danger-500/20 hover:border-danger-500/40
-                           focus:outline-none focus:ring-2 focus:ring-danger-500/20"
-                            >
-                                <span aria-hidden="true">×</span> Decline
-                            </button>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Card 3 (same style, EMPTY banner src but keep placeholder background) -->
-                <article
-                    class="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3
-                     shadow-[0_22px_55px_rgba(0,0,0,.55)]
-                     transition hover:-translate-y-[1px] hover:border-brand-500/25"
-                >
-                    <!-- Banner placeholder -->
-                    <div class="relative h-28 w-full">
-                        <img src="" alt="" class="hidden" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-zinc-900/30 via-zinc-800/20 to-zinc-900/30"></div>
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,122,0,.16),transparent_55%),radial-gradient(circle_at_70%_40%,rgba(16,185,129,.12),transparent_55%)]"></div>
-                        <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/25 to-zinc-950/85"></div>
-                        <div class="absolute left-4 top-4 text-xs text-zinc-300/80">Match banner</div>
-                    </div>
-
-                    <div class="p-5">
-                        <div class="flex items-center justify-center gap-4">
-                            <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200" title="Chelsea">
-                                CHE
-                            </div>
-                            <div class="font-display text-brand-500 text-lg tracking-widest">VS</div>
-                            <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200" title="Arsenal">
-                                ARS
-                            </div>
-                        </div>
-
-                        <div class="mt-3 flex items-center justify-center gap-10 text-xs text-zinc-200">
-                            <div class="font-semibold">Chelsea</div>
-                            <div class="font-semibold">Arsenal</div>
-                        </div>
-
-                        <div class="mt-5 space-y-2 text-sm text-zinc-400">
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                February 20, 2025
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                Stamford Bridge
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      </svg>
-                    </span>
-                                Organizer: London Events Ltd
-                            </div>
-                        </div>
-
-                        <div class="mt-5 grid grid-cols-2 gap-3">
-                            <button
-                                type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-ok-500/30 bg-ok-500/15 px-4 py-3 text-sm font-semibold text-ok-500
-                           transition hover:bg-ok-500/20 hover:border-ok-500/40
-                           focus:outline-none focus:ring-2 focus:ring-ok-500/20"
-                            >
-                                <span aria-hidden="true">✓</span> Approve
-                            </button>
-                            <button
-                                type="button"
-                                class="inline-flex items-center justify-center gap-2 rounded-xl border border-danger-500/30 bg-danger-500/15 px-4 py-3 text-sm font-semibold text-danger-500
-                           transition hover:bg-danger-500/20 hover:border-danger-500/40
-                           focus:outline-none focus:ring-2 focus:ring-danger-500/20"
-                            >
-                                <span aria-hidden="true">×</span> Decline
-                            </button>
-                        </div>
-                    </div>
-                </article>
             </div>
         </section>
 

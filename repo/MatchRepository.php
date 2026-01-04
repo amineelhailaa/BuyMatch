@@ -45,6 +45,13 @@ class MatchRepository
         return $this->pdo->lastInsertId();
         }
 
+        public function updateMatchStatus($id,$status)
+        {
+            $query = "update matches set status = ? where id = ?";
+            $stmt = $this->pdo->prepare($query);
+            return $stmt->execute(array($status, $id));
+        }
+
 
         public function eventCountByOrganizerId(int $id){
         $query = "select count(*) from matches where organizer_id = ?";
@@ -59,6 +66,20 @@ class MatchRepository
             $query="select * from list_match where organizer_id = ?";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(array($id));
+            $rows= $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $matchesList =[];
+            foreach ($rows as $row) {
+                $matchSum =MatchSummary::fromRows($row);
+                $matchesList[] = $matchSum;
+            }
+            return $matchesList;
+        }
+
+        public function pendingMatches()
+        {
+            $query="select * from list_match where status = 'in progress'";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
             $rows= $stmt->fetchAll(PDO::FETCH_ASSOC);
             $matchesList =[];
             foreach ($rows as $row) {

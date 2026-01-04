@@ -14,7 +14,8 @@ class MatchSummary
         private ?string $team2Logo, // filename or null
 
         private ?string $status = null,  // pending/validated/rejected (optional)
-        private ?string $banner = null    // optional if you display it
+        private ?string $banner = null,    // optional if you display it
+        private int $organizer_id
     ) {}
 
     public static function fromRows(array $row): self
@@ -31,7 +32,8 @@ class MatchSummary
             $row['team2_logo'],
 
             $row['status'],
-            $row['banner']
+            $row['banner'],
+            $row['organizer_id']
         );
     }
 
@@ -49,5 +51,10 @@ class MatchSummary
 
     public function getStatus(): ?string { return $this->status; }
     public function getBanner(): ?string { return $this->banner; }
+
+    public function getOrganizerId(): int
+    {
+        return $this->organizer_id;
+    }
 
 }
