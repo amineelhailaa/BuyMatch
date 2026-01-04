@@ -56,17 +56,19 @@ class MatchRepository
 
         public function myMatches(int $id)
         {
-            $query="select * from matches where organizer_id = ?";
+            $query="select * from list_match where organizer_id = ?";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(array($id));
             $rows= $stmt->fetchAll(PDO::FETCH_ASSOC);
             $matchesList =[];
             foreach ($rows as $row) {
-                $match = new MatchEvent($row['id_team1'], $row['id_team2'], $row['banner'], $row['match_date'], $row['match_hour'],$row['lieu'],$row['placesMax'],$row['organizer_id'],$row['id']);
-                $match->setStatus($row['status']);
-                $matchesList[] = $match;
+                $matchSum =MatchSummary::fromRows($row);
+                $matchesList[] = $matchSum;
             }
             return $matchesList;
         }
+
+
+
 
 }

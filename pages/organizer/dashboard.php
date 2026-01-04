@@ -1,4 +1,6 @@
 <?php
+require_once "../../classes/MatchSummary.php";
+
 
 
 $organizer_id = 3; //fortesting
@@ -177,10 +179,11 @@ $matchList = $matchrepo->myMatches($organizer_id);
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Events Created</div>
-                            <div class="mt-1 font-display text-3xl text-white"><?php
+                            <div class="mt-1 font-display text-3xl text-white">
+                                <?php
                                 echo $matchrepo->eventCountByOrganizerId($organizer_id);
-
-                                ?></div>
+                                ?>
+                            </div>
                             <div class="mt-2 text-xs text-ok-500">+15% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-purple-500/15 ring-1 ring-purple-500/25">
@@ -251,8 +254,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
                     <!-- Card 1 -->
                     <?php
-
-                    foreach ($matchList as $match):
+                    foreach ($matchList as $match){
                     ?>
                     <article
                         class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-5
@@ -263,12 +265,12 @@ $matchList = $matchrepo->myMatches($organizer_id);
                             <div class="flex items-center gap-3">
                                 <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">
                                     <img
-                                            src="../../uploads/<?= $match->get ?>"
+                                            src="../../uploads/<?= $match->getTeam1Logo() ?>"
                                             class="h-12 w-12 rounded-full object-cover bg-zinc-900/55 ring-1 ring-white/15"
                                     />
                                 </div>
                                 <div class="space-y-0.5">
-                                    <div class="text-sm font-semibold text-white">Real Madrid</div>
+                                    <div class="text-sm font-semibold text-white"><?= $match->getTeam1Name() ?></div>
                                     <div class="text-xs text-zinc-500">Home</div>
                                 </div>
                             </div>
@@ -277,11 +279,14 @@ $matchList = $matchrepo->myMatches($organizer_id);
 
                             <div class="flex items-center gap-3">
                                 <div class="space-y-0.5 text-right">
-                                    <div class="text-sm font-semibold text-white">Barcelona</div>
+                                    <div class="text-sm font-semibold text-white"><?= $match->getTeam2Name() ?></div>
                                     <div class="text-xs text-zinc-500">Away</div>
                                 </div>
                                 <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">
-                                    FCB
+                                    <img
+                                            src="../../uploads/<?= $match->getTeam2Logo() ?>"
+                                            class="h-12 w-12 rounded-full object-cover bg-zinc-900/55 ring-1 ring-white/15"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -294,7 +299,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
                         <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
                       </svg>
                     </span>
-                                January 15, 2025
+                                <?= $match->getDate() ?>
                             </div>
                             <div class="flex items-center gap-2">
                     <span class="text-brand-500">
@@ -303,7 +308,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
                         <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" stroke-width="2" />
                       </svg>
                     </span>
-                                20:00
+                                <?= $match->getTime() ?>
                             </div>
                             <div class="flex items-center gap-2">
                     <span class="text-brand-500">
@@ -312,7 +317,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
                         <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
                       </svg>
                     </span>
-                                Santiago Bernabéu Stadium
+                                <?= $match->getLocation() ?>
                             </div>
                         </div>
 
@@ -324,80 +329,83 @@ $matchList = $matchrepo->myMatches($organizer_id);
                             See Details
                         </a>
                     </article>
+                    <?php
+                    }
+                    ?>
 
                     <!-- Card 2 -->
-                    <article
-                        class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-5
-                       shadow-[0_22px_55px_rgba(0,0,0,.55)]
-                       transition hover:-translate-y-[1px] hover:border-brand-500/25"
-                    >
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">
-                                    MU
-                                </div>
-                                <div class="space-y-0.5">
-                                    <div class="text-sm font-semibold text-white">Man United</div>
-                                    <div class="text-xs text-zinc-500">Home</div>
-                                </div>
-                            </div>
-
-                            <div class="relative">
-                                <div class="font-display text-brand-500 text-lg tracking-widest">VS</div>
-                                <span class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full border border-red-500/25 bg-red-500/10 px-2 py-0.5 text-[10px] text-red-200">
-                      LIVE
-                    </span>
-                            </div>
-
-                            <div class="flex items-center gap-3">
-                                <div class="space-y-0.5 text-right">
-                                    <div class="text-sm font-semibold text-white">Liverpool</div>
-                                    <div class="text-xs text-zinc-500">Away</div>
-                                </div>
-                                <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">
-                                    LIV
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 space-y-2 text-sm text-zinc-400">
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                January 18, 2025
-                            </div>
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 7v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                        <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                17:30
-                            </div>
-                            <div class="flex items-center gap-2">
-                    <span class="text-brand-500">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                Old Trafford
-                            </div>
-                        </div>
-
-                        <a
-                            href="#"
-                            class="mt-5 inline-flex w-full items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10 px-4 py-3 text-sm font-semibold text-brand-500
-                         transition hover:bg-brand-500/15 hover:border-brand-500/35 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-                        >
-                            See Details
-                        </a>
-                    </article>
+<!--                    <article-->
+<!--                        class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-5-->
+<!--                       shadow-[0_22px_55px_rgba(0,0,0,.55)]-->
+<!--                       transition hover:-translate-y-[1px] hover:border-brand-500/25"-->
+<!--                    >-->
+<!--                        <div class="flex items-center justify-between">-->
+<!--                            <div class="flex items-center gap-3">-->
+<!--                                <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">-->
+<!--                                    MU-->
+<!--                                </div>-->
+<!--                                <div class="space-y-0.5">-->
+<!--                                    <div class="text-sm font-semibold text-white">Man United</div>-->
+<!--                                    <div class="text-xs text-zinc-500">Home</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!---->
+<!--                            <div class="relative">-->
+<!--                                <div class="font-display text-brand-500 text-lg tracking-widest">VS</div>-->
+<!--                                <span class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full border border-red-500/25 bg-red-500/10 px-2 py-0.5 text-[10px] text-red-200">-->
+<!--                      LIVE-->
+<!--                    </span>-->
+<!--                            </div>-->
+<!---->
+<!--                            <div class="flex items-center gap-3">-->
+<!--                                <div class="space-y-0.5 text-right">-->
+<!--                                    <div class="text-sm font-semibold text-white">Liverpool</div>-->
+<!--                                    <div class="text-xs text-zinc-500">Away</div>-->
+<!--                                </div>-->
+<!--                                <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">-->
+<!--                                    LIV-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <div class="mt-4 space-y-2 text-sm text-zinc-400">-->
+<!--                            <div class="flex items-center gap-2">-->
+<!--                    <span class="text-brand-500">-->
+<!--                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                        <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                        <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />-->
+<!--                      </svg>-->
+<!--                    </span>-->
+<!--                                January 18, 2025-->
+<!--                            </div>-->
+<!--                            <div class="flex items-center gap-2">-->
+<!--                    <span class="text-brand-500">-->
+<!--                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                        <path d="M12 7v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                        <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z" stroke="currentColor" stroke-width="2" />-->
+<!--                      </svg>-->
+<!--                    </span>-->
+<!--                                17:30-->
+<!--                            </div>-->
+<!--                            <div class="flex items-center gap-2">-->
+<!--                    <span class="text-brand-500">-->
+<!--                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                        <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />-->
+<!--                        <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                      </svg>-->
+<!--                    </span>-->
+<!--                                Old Trafford-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <a-->
+<!--                            href="#"-->
+<!--                            class="mt-5 inline-flex w-full items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10 px-4 py-3 text-sm font-semibold text-brand-500-->
+<!--                         transition hover:bg-brand-500/15 hover:border-brand-500/35 focus:outline-none focus:ring-2 focus:ring-brand-500/20"-->
+<!--                        >-->
+<!--                            See Details-->
+<!--                        </a>-->
+<!--                    </article>-->
                 </div>
             </div>
         </section>
