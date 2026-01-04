@@ -10,6 +10,7 @@ class MatchEvent
     private $time;
     private $location;
     private $placesmax;
+    private $status;
     private $organizer_id;
 
     public function __construct(
@@ -84,5 +85,17 @@ class MatchEvent
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+
+    public function setStatus($status): void
+    {
+        $this->status = $status;
     }
 }

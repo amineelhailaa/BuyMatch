@@ -30,25 +30,13 @@ try {
        }else{
             throw new Exception("No file uploaded");
         }
-    $banner = UploadPic::uploadPicture($_FILES['banner']);
+        $banner = UploadPic::uploadPicture($_FILES['banner']);
         $submitMatch =  new MatchRepository($con);
-//        $match_id = $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesmax'],$organizer_id);
         $match_id = $submitMatch->createMatch(new MatchEvent($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesmax'],$organizer_id));
         $submitCategory =  new CategoryRepository($con);
         for ( $i=0 ; $i<count($_POST['label']) ; $i++ ){
             $submitCategory->createCategory($match_id,$_POST['label'][$i],$_POST['price'][$i],$_POST['maxseats'][$i]);
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 }catch (Throwable $e){
     echo "Error: " . $e->getMessage();
@@ -197,7 +185,7 @@ try {
     <main class="grain relative">
         <section class="mx-auto max-w-6xl px-4 py-10 md:py-14">
             <a
-                href="#"
+                href="./dashboard.php"
                 class="inline-flex items-center gap-2 text-sm text-zinc-300 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/25 rounded-lg px-2 py-1"
             >
                 <span class="text-zinc-400" aria-hidden="true">←</span>

@@ -45,4 +45,28 @@ class MatchRepository
         return $this->pdo->lastInsertId();
         }
 
+
+        public function eventCountByOrganizerId(int $id){
+        $query = "select count(*) from matches where organizer_id = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($id));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['count(*)'];
+        }
+
+        public function myMatches(int $id)
+        {
+            $query="select * from matches where organizer_id = ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array($id));
+            $rows= $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $matchesList =[];
+            foreach ($rows as $row) {
+                $match = new MatchEvent($row['id_team1'], $row['id_team2'], $row['banner'], $row['match_date'], $row['match_hour'],$row['lieu'],$row['placesMax'],$row['organizer_id'],$row['id']);
+                $match->setStatus($row['status']);
+                $matchesList[] = $match;
+            }
+            return $matchesList;
+        }
+
 }

@@ -1,3 +1,18 @@
+<?php
+
+
+$organizer_id = 3; //fortesting
+require_once "../../config/database.php";
+require_once "../../repo/MatchRepository.php";
+$matchrepo = new MatchRepository(Database::getConnection());
+$matchList = $matchrepo->myMatches($organizer_id);
+
+
+
+?>
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -140,7 +155,7 @@
 
                 <div class="md:pt-10">
                     <a
-                        href="#"
+                        href="./createMatch.php"
                         class="inline-flex items-center gap-2 rounded-xl bg-purple-500 px-5 py-3 text-sm font-semibold text-white
                        shadow-[0_0_0_1px_rgba(124,58,237,.25),0_18px_50px_rgba(124,58,237,.14)]
                        transition hover:bg-purple-600 focus:outline-none focus:ring-4 focus:ring-purple-500/20"
@@ -162,7 +177,10 @@
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Events Created</div>
-                            <div class="mt-1 font-display text-3xl text-white">12</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?php
+                                echo $matchrepo->eventCountByOrganizerId($organizer_id);
+
+                                ?></div>
                             <div class="mt-2 text-xs text-ok-500">+15% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-purple-500/15 ring-1 ring-purple-500/25">
@@ -232,6 +250,10 @@
 
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
                     <!-- Card 1 -->
+                    <?php
+
+                    foreach ($matchList as $match):
+                    ?>
                     <article
                         class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-5
                        shadow-[0_22px_55px_rgba(0,0,0,.55)]
@@ -240,7 +262,10 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200">
-                                    RM
+                                    <img
+                                            src="../../uploads/<?= $match->get ?>"
+                                            class="h-12 w-12 rounded-full object-cover bg-zinc-900/55 ring-1 ring-white/15"
+                                    />
                                 </div>
                                 <div class="space-y-0.5">
                                     <div class="text-sm font-semibold text-white">Real Madrid</div>
