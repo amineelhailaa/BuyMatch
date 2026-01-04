@@ -7,8 +7,10 @@ require_once "../../config/database.php";
 require_once "../../repo/TeamRepository.php";
 require_once "../../classes/UploadPic.php";
 require_once "../../classes/Team.php";
+require_once "../../classes/Match.php";
 require_once "../../repo/MatchRepository.php";
 require_once "../../repo/CategoryRepository.php";
+
 //khsni redirect hna
 
 //$organizer_id= $_SESSION['user_id'];
@@ -22,23 +24,19 @@ try {
         if(isset($_FILES['teamlogo1']) && isset($_FILES['teamlogo2'])){
             $logo1 =UploadPic::uploadPicture($_FILES['teamlogo1']);
             $logo2 =UploadPic::uploadPicture($_FILES['teamlogo2']);
-//            $team1 = new Team($_POST['teamname1'],$logo1);
-//            $team2 = new Team($_POST['teamname2'],$logo2);
           $team1 = $createTeams->createTeam(new Team($_POST['teamname1'],$logo1));
           $team2 = $createTeams->createTeam(new Team($_POST['teamname2'],$logo2));
-//         $team1 = $createTeams->createTeam($_POST['teamname1'],UploadPic::uploadPicture($_FILES['teamlogo1']));
-//          $team2 = $createTeams->createTeam($_POST['teamname2'],UploadPic::uploadPicture($_FILES['teamlogo2']));
-        }else{
+
+       }else{
             throw new Exception("No file uploaded");
         }
     $banner = UploadPic::uploadPicture($_FILES['banner']);
         $submitMatch =  new MatchRepository($con);
-        $match_id = $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesmax'],$organizer_id);
+//        $match_id = $submitMatch->createMatch($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesmax'],$organizer_id);
+        $match_id = $submitMatch->createMatch(new MatchEvent($team1,$team2,$banner,$_POST['date'],$_POST['hour'],$_POST['lieu'],$_POST['placesmax'],$organizer_id));
         $submitCategory =  new CategoryRepository($con);
         for ( $i=0 ; $i<count($_POST['label']) ; $i++ ){
             $submitCategory->createCategory($match_id,$_POST['label'][$i],$_POST['price'][$i],$_POST['maxseats'][$i]);
-
-
         }
 
 
