@@ -12,6 +12,7 @@ try {
     $categoryRepo = new CategoryRepository(Database::getConnection());
     $categories = $categoryRepo->getCategoriesByMatchId($matchId);
 
+
 }catch (Throwable $exception){
     echo $exception->getMessage();
 }
@@ -325,7 +326,7 @@ try {
                     <!-- Buy button (hover like before) -->
                     <div class="w-full flex justify-start">
                         <a
-                                href="#"
+                                href="./buyTicket.php?id=<?= $match->getMatchId() ?>"
                                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-zinc-950 shadow-glow
                          transition duration-200 hover:bg-brand-600 hover:-translate-y-[1px] focus:outline-none focus:ring-2 focus:ring-brand-500/25"
                         >

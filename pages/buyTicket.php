@@ -1,3 +1,34 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+require_once "../repo/MatchRepository.php";
+require_once "../repo/CategoryRepository.php";
+require_once "../classes/MatchSummary.php";
+require_once "../classes/Category.php";
+require_once "../config/database.php";
+$match_id = $_GET['id'];
+try {
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+       $categoryChosen =  $_POST['ticket'];
+       $quantity =  $_POST['qtyInput'];
+
+
+
+
+    }
+
+
+
+
+
+    $matchRepository = new MatchRepository(Database::getConnection());
+    $match = $matchRepository->getMatcheById($match_id);
+    $categoryRepo = new CategoryRepository(Database::getConnection());
+    $categories = $categoryRepo->getCategoriesByMatchId($match_id);
+
+
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,6 +73,13 @@
             background-size: 3px 3px;
             opacity: 0.11;
             mix-blend-mode: overlay;
+        }
+
+        /* ADDED: logo sizing for the small round buttons */
+        .team-logo{
+            object-fit: cover;
+            @apply h-full w-full rounded-full object-cover;
+
         }
     </style>
 </head>
@@ -147,16 +185,18 @@
                                 title="Real Madrid"
                                 aria-label="Real Madrid logo"
                         >
-                            <span class="font-display text-[11px] text-zinc-200">RM</span>
+                            <!-- CHANGED: abbreviation -> img -->
+                            <img src="../uploads/<?= $match->getTeam1Logo() ?>" alt="Team 1" class="team-logo  h-full w-full rounded-full object-cover" />
+
                             <span class="pointer-events-none absolute inset-0 rounded-full opacity-0 transition group-hover/logo:opacity-100">
-                    <span class="absolute inset-[-8px] rounded-full bg-brand-500/10 blur-xl"></span>
-                  </span>
+                                <span class="absolute inset-[-8px] rounded-full bg-brand-500/10 blur-xl"></span>
+                            </span>
                         </button>
 
                         <div class="flex items-center gap-4">
-                            <div class="text-sm font-semibold text-white">Real Madrid</div>
+                            <div class="text-sm font-semibold text-white"><?= $match->getTeam1Name() ?></div>
                             <div class="font-display text-brand-500 text-lg tracking-widest">VS</div>
-                            <div class="text-sm font-semibold text-white">Barcelona</div>
+                            <div class="text-sm font-semibold text-white"><?= $match->getTeam2Name() ?></div>
                         </div>
 
                         <!-- right team -->
@@ -169,44 +209,46 @@
                                 title="Barcelona"
                                 aria-label="Barcelona logo"
                         >
-                            <span class="font-display text-[11px] text-zinc-200">FCB</span>
+                            <!-- CHANGED: abbreviation -> img -->
+                            <img src="../uploads/<?= $match->getTeam2Logo() ?>" alt="Team 2" class="team-logo h-full w-full rounded-full object-cover" />
+
                             <span class="pointer-events-none absolute inset-0 rounded-full opacity-0 transition group-hover/logo:opacity-100">
-                    <span class="absolute inset-[-8px] rounded-full bg-brand-500/10 blur-xl"></span>
-                  </span>
+                                <span class="absolute inset-[-8px] rounded-full bg-brand-500/10 blur-xl"></span>
+                            </span>
                         </button>
                     </div>
 
                     <div class="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-zinc-400">
-                <span class="inline-flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                      <path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                  January 15, 2025
-                </span>
+                        <span class="inline-flex items-center gap-2">
+                          <span class="text-brand-500">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                              <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                              <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
+                              <path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                          </span>
+                          <?= $match->getDate() ?>
+                        </span>
 
                         <span class="inline-flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2" />
-                      <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                  </span>
-                  20:00
-                </span>
+                          <span class="text-brand-500">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                              <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2" />
+                              <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                          </span>
+                          <?= $match->getTime() ?>
+                        </span>
 
                         <span class="inline-flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                      <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                  Santiago Bernabéu Stadium
-                </span>
+                          <span class="text-brand-500">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                              <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
+                              <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                          </span>
+                          <?= $match->getLocation() ?>
+                        </span>
                     </div>
                 </article>
 
@@ -218,8 +260,14 @@
                     <h2 class="text-sm font-semibold text-white">Select Category</h2>
 
                     <!-- Categories (click selects + focus transfers) -->
-                    <div class="mt-4 space-y-3">
+                   <form method="post" >
+
+                       <div class="mt-4 space-y-3">
                         <!-- Normal -->
+                        <?php
+                        foreach ($categories as $category):
+
+                        ?>
                         <label
                                 class="ticket-card group relative flex cursor-pointer items-center justify-between gap-4 rounded-xl border px-4 py-4 outline-none
                          border-brand-500/45 bg-brand-500/10 shadow-[0_0_0_1px_rgba(255,122,0,.12)]
@@ -228,7 +276,7 @@
                          focus:ring-2 focus:ring-brand-500/25"
                                 tabindex="0"
                         >
-                            <input type="radio" name="ticket" class="sr-only" data-price="50" checked />
+                            <input type="radio" name="ticket" class="sr-only" value="<?= $category->getId() ?>" data-price="<?= $category->getPrice() ?>" checked />
                             <div class="flex items-center gap-3">
                     <span class="ticket-icon text-brand-500">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -237,62 +285,18 @@
                       </svg>
                     </span>
                                 <div>
-                                    <div class="ticket-title text-sm font-semibold text-brand-500">Normal</div>
-                                    <div class="text-xs text-zinc-400">500 seats available</div>
+                                    <div class="ticket-title text-sm font-semibold text-brand-500"><?= $category->getLabel() ?></div>
+                                    <div class="text-xs text-zinc-400"><?= $category->getMaxSeats() ?> seats available</div>
                                 </div>
                             </div>
-                            <div class="ticket-price text-lg font-bold text-brand-500">$50</div>
+                            <div class="ticket-price text-lg font-bold text-brand-500">$<?= $category->getPrice() ?> </div>
                         </label>
-
-                        <!-- Premium -->
-                        <label
-                                class="ticket-card group relative flex cursor-pointer items-center justify-between gap-4 rounded-xl border px-4 py-4 outline-none
-                         border-white/10 bg-white/5
-                         transition duration-200
-                         hover:-translate-y-[1px] hover:border-brand-500/25 hover:bg-white/8 hover:shadow-[0_0_0_1px_rgba(255,122,0,.12),0_22px_55px_rgba(0,0,0,.55)]
-                         focus:ring-2 focus:ring-brand-500/25"
-                                tabindex="0"
-                        >
-                            <input type="radio" name="ticket" class="sr-only" data-price="120" />
-                            <div class="flex items-center gap-3">
-                    <span class="ticket-icon text-zinc-300 transition group-hover:text-brand-500">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M9 8v12" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                <div>
-                                    <div class="ticket-title text-sm font-semibold text-white transition group-hover:text-brand-500">Premium</div>
-                                    <div class="text-xs text-zinc-400">200 seats available</div>
-                                </div>
-                            </div>
-                            <div class="ticket-price text-lg font-bold text-white transition group-hover:text-brand-500">$120</div>
-                        </label>
-
-                        <!-- VIP -->
-                        <label
-                                class="ticket-card group relative flex cursor-pointer items-center justify-between gap-4 rounded-xl border px-4 py-4 outline-none
-                         border-white/10 bg-white/5
-                         transition duration-200
-                         hover:-translate-y-[1px] hover:border-brand-500/25 hover:bg-white/8 hover:shadow-[0_0_0_1px_rgba(255,122,0,.12),0_22px_55px_rgba(0,0,0,.55)]
-                         focus:ring-2 focus:ring-brand-500/25"
-                                tabindex="0"
-                        >
-                            <input type="radio" name="ticket" class="sr-only" data-price="250" />
-                            <div class="flex items-center gap-3">
-                    <span class="ticket-icon text-zinc-300 transition group-hover:text-brand-500">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z" stroke="currentColor" stroke-width="2" />
-                        <path d="M9 8v12" stroke="currentColor" stroke-width="2" />
-                      </svg>
-                    </span>
-                                <div>
-                                    <div class="ticket-title text-sm font-semibold text-white transition group-hover:text-brand-500">VIP</div>
-                                    <div class="text-xs text-zinc-400">50 seats available</div>
-                                </div>
-                            </div>
-                            <div class="ticket-price text-lg font-bold text-white transition group-hover:text-brand-500">$250</div>
-                        </label>
+                        <?php
+                            endforeach;
+                        }catch (Throwable $exception){
+                            echo $exception->getMessage();
+                        }
+                        ?>
                     </div>
 
                     <!-- Quantity -->
@@ -315,7 +319,7 @@
                             </button>
 
                             <div id="qtyValue" class="w-16 text-center font-display text-2xl text-white">1</div>
-
+                                <input type="hidden" id="qtyInput" name="qtyInput" value="" >
                             <button
                                     id="qtyPlus"
                                     type="button"
@@ -336,31 +340,34 @@
                     <div class="mt-5 flex items-center justify-between">
                         <div class="text-sm text-zinc-400">Total Amount</div>
                         <div id="totalAmount" class="font-display text-3xl text-brand-500 drop-shadow-[0_0_18px_rgba(255,122,0,.2)]">
-                            $50
+
                         </div>
                     </div>
 
                     <!-- Confirm -->
                     <button
-                            type="button"
+                            type="submit"
+
                             class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-4 text-sm font-semibold text-zinc-950 shadow-glow
                        transition duration-200
                        hover:bg-brand-600 hover:-translate-y-[1px]
                        focus:outline-none focus:ring-2 focus:ring-brand-500/25 active:translate-y-0"
                     >
-                <span class="text-zinc-950/90">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                            d="M7 8h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                    />
-                    <path d="M9 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                  </svg>
-                </span>
+                        <span class="text-zinc-950/90">
+
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path
+                                    d="M7 8h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                            />
+                            <path d="M9 12h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                          </svg>
+                        </span>
                         Confirm Purchase
                     </button>
+                   </form>
                 </section>
             </div>
         </section>
@@ -377,7 +384,6 @@
         </button>
     </main>
 </div>
-
 <script>
     // ===== Mobile menu (same as your other pages) =====
     const menuBtn = document.getElementById("menuBtn");
@@ -438,9 +444,10 @@
         const checked = document.querySelector('input[name="ticket"]:checked');
         return Number(checked?.dataset.price || 0);
     }
-
+    const qtyInput = document.getElementById("qtyInput");
     function updateTotal() {
         qtyValue.textContent = String(qty);
+        qtyInput.value = String(qty); // IMPORTANT
         totalAmount.textContent = `$${qty * selectedPrice()}`;
         qtyMinus.disabled = qty <= MIN;
         qtyPlus.disabled = qty >= MAX;
