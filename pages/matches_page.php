@@ -1,4 +1,9 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+
 require_once "../config/database.php";
 require_once "../repo/userRepository.php";
 require_once "../repo/MatchRepository.php";
@@ -392,11 +397,12 @@ $repo = new MatchRepository(Database::getConnection());
                                 <span><?= $match->getLocation() ?></span>
                             </div>
                         </div>
-
+                        <form action="" method="post">
                         <div class="mt-5">
+
                             <a
-                                    href="#"
-                                    class="inline-flex w-full items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10 px-4 py-3
+                                    href="matchDetail.php?id=<?= $match->getMatchId() ?>"
+                                    class=" cursor-pointer inline-flex w-full items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10 px-4 py-3
                text-sm font-semibold text-brand-500
                transition duration-200
                hover:bg-brand-500 hover:text-zinc-950 hover:shadow-glow hover:-translate-y-[1px]
@@ -405,6 +411,7 @@ $repo = new MatchRepository(Database::getConnection());
                                 See Details
                             </a>
                         </div>
+                        </form>
                     </div>
                 </article>
 
