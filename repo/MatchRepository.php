@@ -2,6 +2,7 @@
 
 
 require_once __DIR__."/../classes/Match.php";
+require_once __DIR__."/../classes/MatchSummary.php";
 class MatchRepository
 {
     private PDO $pdo;
@@ -24,7 +25,7 @@ class MatchRepository
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array($id));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row===false? null:$row;
+        return MatchSummary::fromRows($row);
         }
 
 

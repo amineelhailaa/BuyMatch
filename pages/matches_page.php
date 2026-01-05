@@ -401,7 +401,7 @@ $repo = new MatchRepository(Database::getConnection());
                         <div class="mt-5">
 
                             <a
-                                    href="matchDetail.php?id=<?= $match->getMatchId() ?>"
+                                    href="matchDetail.php?match_id=<?= $match->getMatchId() ?>"
                                     class=" cursor-pointer inline-flex w-full items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10 px-4 py-3
                text-sm font-semibold text-brand-500
                transition duration-200

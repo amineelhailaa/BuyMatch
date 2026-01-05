@@ -1,3 +1,23 @@
+<?php
+require_once "../config/database.php";
+require_once "../classes/MatchSummary.php";
+require_once "../classes/Category.php";
+require_once "../repo/MatchRepository.php";
+require_once "../repo/CategoryRepository.php";
+
+$matchId = $_GET['match_id'];
+try {
+    $matchRepository = new MatchRepository(Database::getConnection());
+    $match = $matchRepository->getMatcheById($matchId);
+    $categoryRepo = new CategoryRepository(Database::getConnection());
+    $categories = $categoryRepo->getCategoriesByMatchId($matchId);
+
+}catch (Throwable $exception){
+    echo $exception->getMessage();
+}
+?>
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,8 +29,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700;800&display=swap"
+            rel="stylesheet"
     />
 
     <!-- Tailwind CDN -->
@@ -44,6 +64,14 @@
             background-size: 3px 3px;
             opacity: 0.11;
             mix-blend-mode: overlay;
+        }
+
+        /* Added only to size logo images nicely */
+        .team-logo{
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,.35));
         }
     </style>
 </head>
@@ -84,17 +112,17 @@
                     <span aria-hidden="true">↗</span> Login
                 </a>
                 <a
-                    class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="#register"
+                        class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                        href="#register"
                 >Register</a
                 >
             </nav>
 
             <button
-                id="menuBtn"
-                class="md:hidden inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition"
-                aria-label="Open menu"
-                aria-expanded="false"
+                    id="menuBtn"
+                    class="md:hidden inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 py-2 hover:bg-white/10 transition"
+                    aria-label="Open menu"
+                    aria-expanded="false"
             >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" />
@@ -108,8 +136,8 @@
                 <a class="hover:text-white transition" href="#matches">Matches</a>
                 <a class="hover:text-white transition" href="#login">Login</a>
                 <a
-                    class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="#register"
+                        class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                        href="#register"
                 >Register</a
                 >
             </div>
@@ -118,11 +146,10 @@
 
     <!-- Top stadium hero strip (like screenshot) -->
     <div class="relative h-44 w-full overflow-hidden border-b border-white/5">
-        <!-- Replace with your real image -->
         <img
-            src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?q=80&w=1600&auto=format&fit=crop"
-            alt="Stadium"
-            class="h-full w-full object-cover opacity-70"
+                src="../uploads/<?= $match->getBanner() ?>"
+                alt="Stadium"
+                class="h-full w-full object-cover opacity-70"
         />
         <div class="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-zinc-950/40 to-zinc-950"></div>
     </div>
@@ -132,7 +159,7 @@
         <section class="mx-auto max-w-6xl px-4 py-10 md:py-12">
             <!-- Match details card -->
             <article
-                class="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6 md:p-7"
+                    class="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6 md:p-7"
             >
                 <!-- subtle inner glow -->
                 <div class="pointer-events-none absolute inset-0">
@@ -146,20 +173,20 @@
                         <!-- Team A -->
                         <div class="flex flex-col items-center gap-3">
                             <button
-                                type="button"
-                                class="group/logo relative grid h-20 w-20 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
+                                    type="button"
+                                    class="group/logo relative grid h-20 w-20 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
                            transition duration-200
                            hover:ring-brand-500/70 hover:shadow-[0_0_0_1px_rgba(255,122,0,.25),0_18px_45px_rgba(255,122,0,.14)]
                            hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-brand-500/25"
-                                aria-label="Real Madrid logo"
-                                title="Real Madrid"
+                                    aria-label="Team 1 logo"
+                                    title="<?= $match->getTeam1Name() ?>"
                             >
-                                <span class="font-display text-sm tracking-wide text-zinc-200">RM</span>
+                                <img src="../uploads/<?= $match->getTeam1Logo() ?>" alt="<?= $match->getTeam1Name() ?>" class="team-logo" />
                                 <span class="pointer-events-none absolute inset-0 rounded-full opacity-0 transition group-hover/logo:opacity-100">
                       <span class="absolute inset-[-10px] rounded-full bg-brand-500/10 blur-2xl"></span>
                     </span>
                             </button>
-                            <div class="text-sm font-semibold text-white">Real Madrid</div>
+                            <div class="text-sm font-semibold text-white"><?= $match->getTeam1Name() ?></div>
                         </div>
 
                         <!-- VS -->
@@ -172,20 +199,20 @@
                         <!-- Team B -->
                         <div class="flex flex-col items-center gap-3">
                             <button
-                                type="button"
-                                class="group/logo relative grid h-20 w-20 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
+                                    type="button"
+                                    class="group/logo relative grid h-20 w-20 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
                            transition duration-200
                            hover:ring-brand-500/70 hover:shadow-[0_0_0_1px_rgba(255,122,0,.25),0_18px_45px_rgba(255,122,0,.14)]
                            hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-brand-500/25"
-                                aria-label="Barcelona logo"
-                                title="Barcelona"
+                                    aria-label="Team 2 logo"
+                                    title="<?= $match->getTeam2Name() ?>"
                             >
-                                <span class="font-display text-sm tracking-wide text-zinc-200">FCB</span>
+                                <img src="../uploads/<?= $match->getTeam2Logo() ?>" alt="<?= $match->getTeam2Name() ?>" class="team-logo" />
                                 <span class="pointer-events-none absolute inset-0 rounded-full opacity-0 transition group-hover/logo:opacity-100">
                       <span class="absolute inset-[-10px] rounded-full bg-brand-500/10 blur-2xl"></span>
                     </span>
                             </button>
-                            <div class="text-sm font-semibold text-white">Barcelona</div>
+                            <div class="text-sm font-semibold text-white"><?= $match->getTeam2Name() ?></div>
                         </div>
                     </div>
 
@@ -203,7 +230,7 @@
                     </span>
                                 <span>Date</span>
                             </div>
-                            <div class="mt-2 text-center text-sm font-semibold text-white">January 15, 2025</div>
+                            <div class="mt-2 text-center text-sm font-semibold text-white"><?= $match->getDate() ?></div>
                         </div>
 
                         <!-- Time -->
@@ -217,7 +244,7 @@
                     </span>
                                 <span>Time</span>
                             </div>
-                            <div class="mt-2 text-center text-sm font-semibold text-white">20:00</div>
+                            <div class="mt-2 text-center text-sm font-semibold text-white"><?= $match->getTime() ?></div>
                         </div>
 
                         <!-- Stadium -->
@@ -231,7 +258,7 @@
                     </span>
                                 <span>Stadium</span>
                             </div>
-                            <div class="mt-2 text-center text-sm font-semibold text-white">Santiago Bernabéu Stadium</div>
+                            <div class="mt-2 text-center text-sm font-semibold text-white"><?= $match->getLocation() ?></div>
                         </div>
 
                         <!-- Duration -->
@@ -240,9 +267,9 @@
                     <span class="text-brand-500">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path
-                            d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
-                            stroke="currentColor"
-                            stroke-width="2"
+                                d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10Z"
+                                stroke="currentColor"
+                                stroke-width="2"
                         />
                         <path d="M12 6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                         <path d="M12 12l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -273,51 +300,41 @@
                         </div>
 
                         <div class="mt-3 grid gap-3 md:grid-cols-3">
+
                             <!-- Normal -->
+                            <?php
+                            foreach($categories as $category):
+                            ?>
                             <div class="rounded-xl border border-white/10 bg-zinc-900/30 px-4 py-3">
                                 <div class="flex items-center justify-between">
-                                    <div class="text-xs text-zinc-400">Normal</div>
-                                    <div class="text-sm font-semibold text-brand-500">$50</div>
+                                    <div class="text-xs text-zinc-400"><?= $category->getLabel() ?></div>
+                                    <div class="text-sm font-semibold text-brand-500"><?= $category->getPrice() ?></div>
                                 </div>
                                 <div class="mt-2 h-px w-full bg-white/5"></div>
                                 <div class="mt-2 text-xs text-zinc-500">Standard seating • Great view</div>
                             </div>
 
-                            <!-- Premium -->
-                            <div class="rounded-xl border border-white/10 bg-zinc-900/30 px-4 py-3">
-                                <div class="flex items-center justify-between">
-                                    <div class="text-xs text-zinc-400">Premium</div>
-                                    <div class="text-sm font-semibold text-brand-500">$120</div>
-                                </div>
-                                <div class="mt-2 h-px w-full bg-white/5"></div>
-                                <div class="mt-2 text-xs text-zinc-500">Closer seats • Faster entry</div>
-                            </div>
+                            <?php
+                            endforeach
+                            ?>
 
-                            <!-- VIP -->
-                            <div class="rounded-xl border border-white/10 bg-zinc-900/30 px-4 py-3">
-                                <div class="flex items-center justify-between">
-                                    <div class="text-xs text-zinc-400">VIP</div>
-                                    <div class="text-sm font-semibold text-brand-500">$250</div>
-                                </div>
-                                <div class="mt-2 h-px w-full bg-white/5"></div>
-                                <div class="mt-2 text-xs text-zinc-500">Best seats • Lounge access</div>
-                            </div>
-                        </div>
-                    </div>
+
+
+
 
                     <!-- Buy button (hover like before) -->
                     <div class="w-full flex justify-start">
                         <a
-                            href="#"
-                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-zinc-950 shadow-glow
+                                href="#"
+                                class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-zinc-950 shadow-glow
                          transition duration-200 hover:bg-brand-600 hover:-translate-y-[1px] focus:outline-none focus:ring-2 focus:ring-brand-500/25"
                         >
                   <span class="text-zinc-950/90">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path
-                          d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z"
-                          stroke="currentColor"
-                          stroke-width="2"
+                              d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z"
+                              stroke="currentColor"
+                              stroke-width="2"
                       />
                       <path d="M9 8v12" stroke="currentColor" stroke-width="2" />
                     </svg>
@@ -334,10 +351,10 @@
               <span class="text-brand-500">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
-                      d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linejoin="round"
+                          d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linejoin="round"
                   />
                 </svg>
               </span>
@@ -354,17 +371,8 @@
                         <div class="flex items-start gap-3">
                             <div class="grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 text-zinc-300">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path
-                                        d="M20 21a8 8 0 1 0-16 0"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                    <path
-                                        d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
+                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
                                 </svg>
                             </div>
 
@@ -385,17 +393,8 @@
                         <div class="flex items-start gap-3">
                             <div class="grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 text-zinc-300">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path
-                                        d="M20 21a8 8 0 1 0-16 0"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                    <path
-                                        d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
+                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
                                 </svg>
                             </div>
 
@@ -414,17 +413,8 @@
                         <div class="flex items-start gap-3">
                             <div class="grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 text-zinc-300">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path
-                                        d="M20 21a8 8 0 1 0-16 0"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                    />
-                                    <path
-                                        d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                    />
+                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                    <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
                                 </svg>
                             </div>
 
@@ -443,9 +433,9 @@
 
         <!-- Built with badge -->
         <button
-            id="builtWith"
-            class="fixed bottom-6 right-6 z-50 rounded-xl border border-white/10 bg-zinc-950/70 px-4 py-2 text-xs text-zinc-200 shadow-lg backdrop-blur hover:bg-zinc-900/70 transition"
-            type="button"
+                id="builtWith"
+                class="fixed bottom-6 right-6 z-50 rounded-xl border border-white/10 bg-zinc-950/70 px-4 py-2 text-xs text-zinc-200 shadow-lg backdrop-blur hover:bg-zinc-900/70 transition"
+                type="button"
         >
             Built with <span aria-hidden="true">♥</span>
             <span class="ml-1 text-brand-500 font-semibold">Tailwind</span>

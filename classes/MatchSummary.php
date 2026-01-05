@@ -13,11 +13,10 @@ class MatchSummary
         private string $team2Name,
         private ?string $team2Logo, // filename or null
 
-        private ?string $status = null,  // pending/validated/rejected (optional)
-        private ?string $banner = null,    // optional if you display it
+        private ?string $status,  // pending/validated/rejected (optional)
+        private ?string $banner,    // optional if you display it
         private int $organizer_id
     ) {}
-
     public static function fromRows(array $row): self
     {
         return new self(
