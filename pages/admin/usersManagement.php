@@ -1,3 +1,27 @@
+<?php
+
+require_once "../../config/database.php";
+require_once "../../classes/Utilisateur.php";
+require_once "../../classes/UserMaker.php";
+require_once "../../repo/userRepository.php";
+
+$repo = new UserRepository(Database::getConnection());
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -177,6 +201,13 @@
 
                 <div class="mt-4 space-y-3">
                     <!-- Row -->
+                    <?php
+
+                    $Buyers=$repo->getUsersByRole('acheteur');
+                    foreach ($Buyers as $buyer):
+                    ?>
+
+                    <form>
                     <div
                         class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
                        shadow-[0_22px_55px_rgba(0,0,0,.45)]
@@ -190,117 +221,120 @@
                                 </svg>
                             </div>
                             <div>
-                                <div class="text-sm font-semibold text-white">John Doe</div>
+                                <div class="text-sm font-semibold text-white"><?= $buyer->getName() ?></div>
                                 <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
                                         <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
-                                    john@example.com
+                                    <?= $buyer->getEmail() ?>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>
+                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500"><?= $buyer->getRole() ?></span>
+                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><?= $buyer->getStatus() ?></span>
                         </div>
-                    </div>
+                    </div></form>
+                    <?php
+                    endforeach;
+                    ?>
 
                     <!-- Row -->
-                    <div
-                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
-                       shadow-[0_22px_55px_rgba(0,0,0,.45)]
-                       transition hover:border-brand-500/20"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-white">Maria Garcia</div>
-                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    maria@example.com
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>
-                        </div>
-                    </div>
-
+<!--                    <div-->
+<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
+<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
+<!--                       transition hover:border-brand-500/20"-->
+<!--                    >-->
+<!--                        <div class="flex items-center gap-3">-->
+<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
+<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="text-sm font-semibold text-white">Maria Garcia</div>-->
+<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
+<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                    </svg>-->
+<!--                                    maria@example.com-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>-->
+<!--                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!---->
                     <!-- Row -->
-                    <div
-                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
-                       shadow-[0_22px_55px_rgba(0,0,0,.45)]
-                       transition hover:border-brand-500/20"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-white">Carlos Martinez</div>
-                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    carlos@example.com
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>
-                            <span class="rounded-full border border-danger-500/25 bg-danger-500/10 px-3 py-1 text-xs text-danger-500"
-                            >Disabled</span
-                            >
-                        </div>
-                    </div>
-
+<!--                    <div-->
+<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
+<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
+<!--                       transition hover:border-brand-500/20"-->
+<!--                    >-->
+<!--                        <div class="flex items-center gap-3">-->
+<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
+<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="text-sm font-semibold text-white">Carlos Martinez</div>-->
+<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
+<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                    </svg>-->
+<!--                                    carlos@example.com-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>-->
+<!--                            <span class="rounded-full border border-danger-500/25 bg-danger-500/10 px-3 py-1 text-xs text-danger-500"-->
+<!--                            >Disabled</span-->
+<!--                            >-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!---->
                     <!-- Row -->
-                    <div
-                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
-                       shadow-[0_22px_55px_rgba(0,0,0,.45)]
-                       transition hover:border-brand-500/20"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-white">Anna Wilson</div>
-                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    anna@example.com
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>
-                        </div>
-                    </div>
+<!--                    <div-->
+<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
+<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
+<!--                       transition hover:border-brand-500/20"-->
+<!--                    >-->
+<!--                        <div class="flex items-center gap-3">-->
+<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
+<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="text-sm font-semibold text-white">Anna Wilson</div>-->
+<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
+<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                    </svg>-->
+<!--                                    anna@example.com-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>-->
+<!--                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
 
@@ -321,6 +355,10 @@
 
                 <div class="mt-4 space-y-3">
                     <!-- Row -->
+                    <?php
+                    $organizers = $repo->getUsersByRole('organisateur');
+                    foreach ($organizers as $organizer):
+                    ?>
                     <div
                         class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
                        shadow-[0_22px_55px_rgba(0,0,0,.45)]
@@ -334,86 +372,88 @@
                                 </svg>
                             </div>
                             <div>
-                                <div class="text-sm font-semibold text-white">Premier Sports Events</div>
+                                <div class="text-sm font-semibold text-white"><?= $organizer->getName() ?></div>
                                 <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                         <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
                                         <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                     </svg>
-                                    contact@premiersports.com
-                                </div>
+                                    <?= $organizer->getEmail() ?>                                </div>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500">Organizer</span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>
+                            <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500"><?= $organizer->getRole() ?></span>
+                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><?= $organizer->getStatus() ?></span>
                         </div>
                     </div>
+                    <?php
+                    endforeach;
+                    ?>
 
                     <!-- Row -->
-                    <div
-                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
-                       shadow-[0_22px_55px_rgba(0,0,0,.45)]
-                       transition hover:border-brand-500/20"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-white">Italia Sports Co.</div>
-                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    info@italiasports.com
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500">Organizer</span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>
-                        </div>
-                    </div>
+<!--                    <div-->
+<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
+<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
+<!--                       transition hover:border-brand-500/20"-->
+<!--                    >-->
+<!--                        <div class="flex items-center gap-3">-->
+<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
+<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="text-sm font-semibold text-white">Italia Sports Co.</div>-->
+<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
+<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                    </svg>-->
+<!--                                    info@italiasports.com-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                            <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500">Organizer</span>-->
+<!--                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
                     <!-- Row -->
-                    <div
-                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
-                       shadow-[0_22px_55px_rgba(0,0,0,.45)]
-                       transition hover:border-brand-500/20"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-white">London Events Ltd</div>
-                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    </svg>
-                                    hello@londonevents.com
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500">Organizer</span>
-                            <span class="rounded-full border border-danger-500/25 bg-danger-500/10 px-3 py-1 text-xs text-danger-500"
-                            >Disabled</span
-                            >
-                        </div>
-                    </div>
+<!--                    <div-->
+<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
+<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
+<!--                       transition hover:border-brand-500/20"-->
+<!--                    >-->
+<!--                        <div class="flex items-center gap-3">-->
+<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
+<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <div>-->
+<!--                                <div class="text-sm font-semibold text-white">London Events Ltd</div>-->
+<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
+<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
+<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                    </svg>-->
+<!--                                    hello@londonevents.com-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!---->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                            <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500">Organizer</span>-->
+<!--                            <span class="rounded-full border border-danger-500/25 bg-danger-500/10 px-3 py-1 text-xs text-danger-500"-->
+<!--                            >Disabled</span-->
+<!--                            >-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </section>

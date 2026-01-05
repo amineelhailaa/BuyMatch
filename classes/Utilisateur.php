@@ -1,6 +1,5 @@
 <?php
 
-namespace classes;
 
 abstract class Utilisateur
 {
@@ -10,7 +9,7 @@ private string $email;
 private  string $password_hash;
 private string $phone;
 private string $status;
-private string $pic;
+private ?string $pic;
 
 public function __construct($name, $email, $password_hash, $phone, $status, $pic,?int $id = null)
 {
@@ -94,7 +93,7 @@ public function __construct($name, $email, $password_hash, $phone, $status, $pic
     abstract public function getRole();
 abstract public function dashboardPath();
 
-    public function getPic(): string
+    public function getPic(): ?string
     {
         return $this->pic;
     }

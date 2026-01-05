@@ -47,4 +47,25 @@ class userRepository
         }
     }
 
+
+    public function getUsersByRole($role)
+    {
+        $query = "select * from utilisateur where role = ?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($role));
+        if ($rows = $stmt->fetchAll(PDO::FETCH_ASSOC)){
+            $users = [];
+            try {
+                foreach ($rows as $row){
+                    $users[] = UserMaker::rightPerson($row);
+                }
+
+            }catch (Throwable $exception){
+                echo $exception->getMessage();
+            }
+            return $users;
+        }
+        return null;
+    }
+
 }
