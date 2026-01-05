@@ -89,6 +89,20 @@ class MatchRepository
             return $matchesList;
         }
 
+        public function getMatchesByStatus($status)
+        {
+            $query = "select * from list_match where status = ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array($status));
+            $rows= $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $matchesList =[];
+            foreach ($rows as $row) {
+                $matchSum =MatchSummary::fromRows($row);
+                $matchesList[] = $matchSum;
+            }
+            return $matchesList;
+        }
+
 
 
 
