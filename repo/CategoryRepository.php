@@ -30,4 +30,40 @@ class CategoryRepository
        return $arrayOfCategories;
     }
 
+    function getMaxPerCategory($category_id)
+    {
+        $query = "select max_seats from ticket_categorie where id = ? ";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($category_id));
+        $row = $stmt->fetchColumn();
+        return $row;
+    }
+
+
+
+    public function getMaxSeats($category_id)
+    {
+        $query="select max_seats from ticket_categorie where id=?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($category_id));
+        return $stmt->fetchColumn();
+
+    }
+    public function getMatchId($category_id)
+    {
+        $query="select match_id from ticket_categorie where id=?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($category_id));
+        return $stmt->fetchColumn();
+    }
+
+
+    public function getCategoryById($category_id){
+        $query="select * from ticket_categorie where id=?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($category_id));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return Category::categoryMaker($row);
+    }
+
 }

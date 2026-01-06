@@ -5,13 +5,34 @@ ini_set('display_startup_errors', '1');
 require_once "../repo/MatchRepository.php";
 require_once "../repo/CategoryRepository.php";
 require_once "../classes/MatchSummary.php";
+require_once "../classes/PurchaseRule.php";
 require_once "../classes/Category.php";
 require_once "../config/database.php";
+require_once "../classes/Reservation.php";
+require_once "../classes/Ticket.php";
+
 $match_id = $_GET['id'];
+$user_id = $_SESSION["user_id"];
 try {
     if($_SERVER["REQUEST_METHOD"] == "POST"){
        $categoryChosen =  $_POST['ticket'];
        $quantity =  $_POST['qtyInput'];
+       $pdo = Database::getConnection();
+         //check constraints
+         //insert reservation
+         //insert ticket
+        if(PurchaseRule::check($categoryChosen,$quantity)){
+            $categoryRepository = new CategoryRepository($pdo);
+            $category = $categoryRepository->getCategoryById($categoryChosen); //objet
+            $pdo->beginTransaction();
+            $reservation = new Reservation($user_id, $match_id,$quantity*$category->getPrice());
+            $reservationRepo= new ReservationRepository($pdo);
+            $reservation->setId($reservationRepo->createReservation($reservation));
+            for ($i=0; $i < $quantity; $i++) {
+                $ticket = new Ticket($reservation->getId(),$category->getId(),$category->getPrice());
+            }
+            $pdo->commit();
+        }
 
 
 
