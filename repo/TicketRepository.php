@@ -7,7 +7,12 @@ class TicketRepository
         $this->pdo = $pdo;
     }
 
-
+    public function createTicket(Ticket $ticket)
+    {
+        $query="insert into ticket (id_reservation,id_category,price) values (?,?,?)";
+        $statement=$this->pdo->prepare($query);
+        return $statement->execute(array($ticket->getIdReservation(),$ticket->getIdCategory(),$ticket->getPrice()));
+    }
 
     public function getTicketsCountByUserInMatch($userId,$matchId){
         $query = "SELECT COUNT(*) FROM ticket t join reservation r on t.id_reservation=r.id where r.user_id=? and r.id_match=?";
@@ -21,4 +26,5 @@ class TicketRepository
         $stmt->execute(array($category_id));
         return $stmt->fetchColumn();
     }
+
 }

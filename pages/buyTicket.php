@@ -10,9 +10,15 @@ require_once "../classes/Category.php";
 require_once "../config/database.php";
 require_once "../classes/Reservation.php";
 require_once "../classes/Ticket.php";
+require_once "../repo/ReservationRepository.php";
+
+
+
+
 
 $match_id = $_GET['id'];
-$user_id = $_SESSION["user_id"];
+//$user_id = $_SESSION["user_id"];
+$user_id = 2;//for testing
 try {
     if($_SERVER["REQUEST_METHOD"] == "POST"){
        $categoryChosen =  $_POST['ticket'];
@@ -21,15 +27,20 @@ try {
          //check constraints
          //insert reservation
          //insert ticket
+
+
+
         if(PurchaseRule::check($categoryChosen,$quantity)){
             $categoryRepository = new CategoryRepository($pdo);
             $category = $categoryRepository->getCategoryById($categoryChosen); //objet
             $pdo->beginTransaction();
             $reservation = new Reservation($user_id, $match_id,$quantity*$category->getPrice());
             $reservationRepo= new ReservationRepository($pdo);
+            $ticketRepository = new TicketRepository($pdo);
             $reservation->setId($reservationRepo->createReservation($reservation));
             for ($i=0; $i < $quantity; $i++) {
                 $ticket = new Ticket($reservation->getId(),$category->getId(),$category->getPrice());
+                $ticketRepository->createTicket($ticket);
             }
             $pdo->commit();
         }
