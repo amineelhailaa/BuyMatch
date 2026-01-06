@@ -153,7 +153,10 @@ $user_id = 2;
                 $matchRepo= new MatchRepository($pdo);
                 $array = $matchRepo->getMatchesByUserId($user_id);
                // query:      ticket  join category join matches ;
-                foreach ($array as  $match):
+
+                    for($i=0;$i<count($array[0]);$i++){
+
+
 
                 ?>
                 <article
@@ -162,7 +165,7 @@ $user_id = 2;
                      transition hover:-translate-y-[1px] hover:border-brand-500/25"
                 >
                     <div class="flex items-start justify-between">
-                        <h3 class="text-sm font-semibold text-white"><?= $match->getTeam1Name() ?> vs <?= $match->getTeam2Name() ?></h3>
+                        <h3 class="text-sm font-semibold text-white"><?= $array[0][$i]->getTeam1Name() ?> vs <?= $array[0][$i]->getTeam2Name() ?></h3>
                         <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/25 text-brand-500">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
@@ -183,7 +186,7 @@ $user_id = 2;
                       <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
                     </svg>
                   </span>
-                            <?= $match->getDate() ?>
+                            <?= $array[0][$i]->getDate() ?>
                         </div>
                         <div class="flex items-center gap-2">
                   <span class="text-brand-500">
@@ -192,7 +195,7 @@ $user_id = 2;
                       <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
                     </svg>
                   </span>
-                            <?= $match->getLocation() ?>
+                            <?= $array[0][$i]->getLocation() ?>
                         </div>
                         <div class="flex items-center gap-2">
                   <span class="text-brand-500">
@@ -206,7 +209,7 @@ $user_id = 2;
                     </div>
 
                     <a
-                        href="#"
+                        href="./ticketDetail.php?id=<?= $array[1][$i]->getId() ?>"
                         class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-zinc-200
                        transition hover:bg-white/10 hover:border-white/15 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                     >
@@ -214,7 +217,7 @@ $user_id = 2;
                     </a>
                 </article>
                 <?php
-                endforeach;
+                    }
                 }catch (Throwable $exception)
                 {
                     echo $exception->getMessage();

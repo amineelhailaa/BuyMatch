@@ -3,6 +3,7 @@
 
 require_once __DIR__."/../classes/Match.php";
 require_once __DIR__."/../classes/MatchSummary.php";
+require_once __DIR__."/../classes/Ticket.php";
 class MatchRepository
 {
     private PDO $pdo;
@@ -113,17 +114,22 @@ class MatchRepository
      */
         public function getMatchesByUserId($user_id): array
         {
-            $query = "select * from list_match m join reservation r  on m.match_id=r.id_match join ticket t on t.id_reservation=r.id where r.user_id=?";
+            $query = "select *,t.id_reservation as myres,t.id_category as mycategory, t.price as myprice, t.id as myid from list_match m join reservation r  on m.match_id=r.id_match join ticket t on t.id_reservation=r.id where r.user_id=?";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(array($user_id));
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $matchesList =[];
+            $matchesList = [];
+            $ticketList = [];
             foreach ($rows as $row) {
+                $ticket = new Ticket($row['myres'], $row['mycategory'], $row['myprice'], $row['myid']);
                 $matchSum = MatchSummary::fromRows($row);
+                $ticketList[] = $ticket;
                 $matchesList[] = $matchSum;
             }
-            return $matchesList;
-        }
+
+            return [$matchesList,$ticketList];
+
+            }
 
 
         public function getMatchByTicketId($ticket_id)
