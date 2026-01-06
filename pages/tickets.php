@@ -1,3 +1,25 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+require_once "../repo/MatchRepository.php";
+require_once "../repo/CategoryRepository.php";
+require_once "../classes/MatchSummary.php";
+require_once "../classes/PurchaseRule.php";
+require_once "../classes/Category.php";
+require_once "../config/database.php";
+require_once "../classes/Reservation.php";
+require_once "../classes/Ticket.php";
+require_once "../repo/ReservationRepository.php";
+
+
+$pdo = Database::getConnection();
+$user_id = 2;
+
+?>
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -124,13 +146,23 @@
 
             <div class="mt-8 grid gap-4 md:grid-cols-3">
                 <!-- Ticket Card 1 -->
+                <?php
+                try {
+
+
+                $matchRepo= new MatchRepository($pdo);
+                $array = $matchRepo->getMatchesByUserId($user_id);
+               // query:      ticket  join category join matches ;
+                foreach ($array as  $match):
+
+                ?>
                 <article
                     class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-4
                      shadow-[0_22px_55px_rgba(0,0,0,.55)]
                      transition hover:-translate-y-[1px] hover:border-brand-500/25"
                 >
                     <div class="flex items-start justify-between">
-                        <h3 class="text-sm font-semibold text-white">Real Madrid vs Barcelona</h3>
+                        <h3 class="text-sm font-semibold text-white"><?= $match->getTeam1Name() ?> vs <?= $match->getTeam2Name() ?></h3>
                         <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/25 text-brand-500">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
@@ -151,7 +183,7 @@
                       <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
                     </svg>
                   </span>
-                            January 15, 2025
+                            <?= $match->getDate() ?>
                         </div>
                         <div class="flex items-center gap-2">
                   <span class="text-brand-500">
@@ -160,7 +192,7 @@
                       <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
                     </svg>
                   </span>
-                            Santiago Bernabéu Stadium
+                            <?= $match->getLocation() ?>
                         </div>
                         <div class="flex items-center gap-2">
                   <span class="text-brand-500">
@@ -181,183 +213,14 @@
                         View Ticket
                     </a>
                 </article>
+                <?php
+                endforeach;
+                }catch (Throwable $exception)
+                {
+                    echo $exception->getMessage();
+                }
+                ?>
 
-                <!-- Ticket Card 2 -->
-                <article
-                    class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-4
-                     shadow-[0_22px_55px_rgba(0,0,0,.55)]
-                     transition hover:-translate-y-[1px] hover:border-brand-500/25"
-                >
-                    <div class="flex items-start justify-between">
-                        <h3 class="text-sm font-semibold text-white">Man United vs Liverpool</h3>
-                        <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/25 text-brand-500">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                        d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    />
-                    <path d="M9 8v12" stroke="currentColor" stroke-width="2" />
-                  </svg>
-                </span>
-                    </div>
-
-                    <div class="mt-3 space-y-2 text-xs text-zinc-400">
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            January 18, 2025
-                        </div>
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                      <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            Old Trafford
-                        </div>
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M20 21a7 7 0 0 0-14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M13.5 8a3.5 3.5 0 1 0-7 0 3.5 3.5 0 0 0 7 0Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            Seat B-23 • Premium
-                        </div>
-                    </div>
-
-                    <a
-                        href="#"
-                        class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-zinc-200
-                       transition hover:bg-white/10 hover:border-white/15 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-                    >
-                        View Ticket
-                    </a>
-                </article>
-
-                <!-- Ticket Card 3 -->
-                <article
-                    class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-4
-                     shadow-[0_22px_55px_rgba(0,0,0,.55)]
-                     transition hover:-translate-y-[1px] hover:border-brand-500/25"
-                >
-                    <div class="flex items-start justify-between">
-                        <h3 class="text-sm font-semibold text-white">PSG vs Bayern Munich</h3>
-                        <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/25 text-brand-500">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                        d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    />
-                    <path d="M9 8v12" stroke="currentColor" stroke-width="2" />
-                  </svg>
-                </span>
-                    </div>
-
-                    <div class="mt-3 space-y-2 text-xs text-zinc-400">
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            December 10, 2024
-                        </div>
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                      <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            Parc des Princes
-                        </div>
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M20 21a7 7 0 0 0-14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M13.5 8a3.5 3.5 0 1 0-7 0 3.5 3.5 0 0 0 7 0Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            Seat C-8 • Normal
-                        </div>
-                    </div>
-
-                    <a
-                        href="#"
-                        class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-zinc-200
-                       transition hover:bg-white/10 hover:border-white/15 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-                    >
-                        View Ticket
-                    </a>
-                </article>
-
-                <!-- Ticket Card 4 -->
-                <article
-                    class="rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-4
-                     shadow-[0_22px_55px_rgba(0,0,0,.55)]
-                     transition hover:-translate-y-[1px] hover:border-brand-500/25 md:col-span-1"
-                >
-                    <div class="flex items-start justify-between">
-                        <h3 class="text-sm font-semibold text-white">Chelsea vs Arsenal</h3>
-                        <span class="grid h-7 w-7 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/25 text-brand-500">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                        d="M4 8h16v4a2 2 0 0 1 0 4v4H4v-4a2 2 0 0 0 0-4V8Z"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    />
-                    <path d="M9 8v12" stroke="currentColor" stroke-width="2" />
-                  </svg>
-                </span>
-                    </div>
-
-                    <div class="mt-3 space-y-2 text-xs text-zinc-400">
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            November 28, 2024
-                        </div>
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" />
-                      <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            Stamford Bridge
-                        </div>
-                        <div class="flex items-center gap-2">
-                  <span class="text-brand-500">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M20 21a7 7 0 0 0-14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                      <path d="M13.5 8a3.5 3.5 0 1 0-7 0 3.5 3.5 0 0 0 7 0Z" stroke="currentColor" stroke-width="2" />
-                    </svg>
-                  </span>
-                            Seat D-42 • Premium
-                        </div>
-                    </div>
-
-                    <a
-                        href="#"
-                        class="mt-4 inline-flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-zinc-200
-                       transition hover:bg-white/10 hover:border-white/15 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-                    >
-                        View Ticket
-                    </a>
-                </article>
             </div>
         </section>
 

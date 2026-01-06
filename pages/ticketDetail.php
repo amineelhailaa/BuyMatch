@@ -1,3 +1,33 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+require_once "../repo/MatchRepository.php";
+require_once "../repo/CategoryRepository.php";
+require_once "../classes/MatchSummary.php";
+require_once "../classes/PurchaseRule.php";
+require_once "../classes/Category.php";
+require_once "../config/database.php";
+require_once "../classes/Reservation.php";
+require_once "../classes/Ticket.php";
+require_once "../repo/ReservationRepository.php";
+
+
+
+try {
+
+    $ticket_id=$_GET['id'];
+    $pdo = Database::getConnection();
+    $matchRepo = new MatchRepository($pdo);
+    $match = $matchRepo->getMatchByTicketId($ticket_id);
+}catch (Exception $e){
+    echo $e->getMessage();
+}
+?>
+
+
+
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -151,7 +181,7 @@
 
                         <!-- Title -->
                         <div class="mt-4 text-center">
-                            <h1 class="font-display text-xl text-white">Real Madrid vs Barcelona</h1>
+                            <h1 class="font-display text-xl text-white"><?= $match->getTeam1Name()." vs ".$match->getTeam2Name() ?></h1>
                             <p class="mt-1 text-xs text-zinc-400">Ticket ID: TKT-2025-001</p>
                         </div>
 
@@ -162,10 +192,10 @@
                                     <img
                                         alt="Real Madrid"
                                         class="h-9 w-9 rounded-full object-cover"
-                                        src="https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg"
+                                        src="../uploads/<?= $match->getTeam1Logo()?>"
                                     />
                                 </div>
-                                <div class="text-[11px] font-semibold text-zinc-200">Real Madrid</div>
+                                <div class="text-[11px] font-semibold text-zinc-200"><?= $match->getTeam1Name()?></div>
                             </div>
 
                             <div class="font-display text-brand-500 text-lg drop-shadow-[0_0_10px_rgba(255,122,0,.35)]">VS</div>
@@ -175,10 +205,10 @@
                                     <img
                                         alt="Barcelona"
                                         class="h-9 w-9 rounded-full object-cover"
-                                        src="https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg"
+                                        src="../uploads/<?= $match->getTeam2Logo()?>"
                                     />
                                 </div>
-                                <div class="text-[11px] font-semibold text-zinc-200">Barcelona</div>
+                                <div class="text-[11px] font-semibold text-zinc-200"><?= $match->getTeam2Name()?></div>
                             </div>
                         </div>
 
@@ -199,7 +229,7 @@
                                     </svg>
                                 </div>
                                 <div class="mt-2 text-[10px] uppercase tracking-wider text-zinc-400">Date</div>
-                                <div class="mt-1 text-xs font-semibold text-zinc-200">January 15, 2025</div>
+                                <div class="mt-1 text-xs font-semibold text-zinc-200"><?= $match->getDate()?></div>
                             </div>
 
                             <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-center">
@@ -210,7 +240,7 @@
                                     </svg>
                                 </div>
                                 <div class="mt-2 text-[10px] uppercase tracking-wider text-zinc-400">Time</div>
-                                <div class="mt-1 text-xs font-semibold text-zinc-200">20:00</div>
+                                <div class="mt-1 text-xs font-semibold text-zinc-200"><?= $match->getTime()?></div>
                             </div>
 
                             <!-- CHANGED: Gate -> Stadium -->
@@ -223,7 +253,7 @@
                                     </svg>
                                 </div>
                                 <div class="mt-2 text-[10px] uppercase tracking-wider text-zinc-400">Stadium</div>
-                                <div class="mt-1 text-xs font-semibold text-zinc-200">Bernabéu</div>
+                                <div class="mt-1 text-xs font-semibold text-zinc-200"><?= $match->getLocation()?></div>
                             </div>
 
                             <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-center">

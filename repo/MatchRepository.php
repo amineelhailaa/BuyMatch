@@ -107,4 +107,31 @@ class MatchRepository
 
 
 
+
+    /**
+     * @return MatchSummary[]
+     */
+        public function getMatchesByUserId($user_id): array
+        {
+            $query = "select * from list_match m join reservation r  on m.match_id=r.id_match join ticket t on t.id_reservation=r.id where r.user_id=?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array($user_id));
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $matchesList =[];
+            foreach ($rows as $row) {
+                $matchSum = MatchSummary::fromRows($row);
+                $matchesList[] = $matchSum;
+            }
+            return $matchesList;
+        }
+
+
+        public function getMatchByTicketId($ticket_id)
+        {
+            $query = "select * from list_match m join reservation r on r.id_match=m.match_id join ticket k on r.id=k.id_reservation where k.id=?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array($ticket_id));
+            $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+            return MatchSummary::fromRows($rows);
+        }
 }

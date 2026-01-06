@@ -27,4 +27,13 @@ class TicketRepository
         return $stmt->fetchColumn();
     }
 
+    public function getTicketById($id): ?Ticket
+    {
+        $query = "select * from ticket where id=?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($id));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return new Ticket($row['id_reservation'],$row['id_category'],$row['price'],$row['id']);
+    }
+
 }
