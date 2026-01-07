@@ -18,4 +18,8 @@ class Ticket
     public function getIdReservation(){ return $this->id_reservation; }
     public function getIdCategory(){ return $this->id_category; }
     public function getPrice(){ return $this->price; }
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
 }

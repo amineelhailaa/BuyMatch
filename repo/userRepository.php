@@ -68,4 +68,17 @@ class userRepository
         return null;
     }
 
+
+
+    public function getUserById(int $id)
+    {
+        $query = "select * from utilisateur where id = ?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($id));
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            return UserMaker::rightPerson($row);
+        }
+        return null;
+    }
+
 }

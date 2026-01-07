@@ -149,7 +149,6 @@ $user_id = 2;
                 <?php
                 try {
 
-
                 $matchRepo= new MatchRepository($pdo);
                 $array = $matchRepo->getMatchesByUserId($user_id);
                // query:      ticket  join category join matches ;

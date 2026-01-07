@@ -290,7 +290,7 @@ try {
 
                         <!-- Download -->
                         <a
-                            href="#"
+                            href="../generatePdf/PdfDownloadService.php?id=<?= $ticket_id ?>"
                             class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-3 text-sm font-semibold text-zinc-950 shadow-glow
                          transition hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20"
                         >

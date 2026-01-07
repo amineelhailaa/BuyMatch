@@ -11,7 +11,8 @@ class TicketRepository
     {
         $query="insert into ticket (id_reservation,id_category,price) values (?,?,?)";
         $statement=$this->pdo->prepare($query);
-        return $statement->execute(array($ticket->getIdReservation(),$ticket->getIdCategory(),$ticket->getPrice()));
+         $statement->execute(array($ticket->getIdReservation(),$ticket->getIdCategory(),$ticket->getPrice()));
+         return $this->pdo->lastInsertId();
     }
 
     public function getTicketsCountByUserInMatch($userId,$matchId){

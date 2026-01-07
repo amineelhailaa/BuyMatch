@@ -10,7 +10,13 @@ require_once "../classes/Category.php";
 require_once "../config/database.php";
 require_once "../classes/Reservation.php";
 require_once "../classes/Ticket.php";
+require_once "../classes/PhpMailerSet.php";
 require_once "../repo/ReservationRepository.php";
+require_once "../repo/userRepository.php";
+require_once "../generatePdf/GeneratePdf.php";
+require_once "../generatePdf/sendEmailService.php";
+
+
 
 
 
@@ -19,11 +25,16 @@ require_once "../repo/ReservationRepository.php";
 $match_id = $_GET['id'];
 //$user_id = $_SESSION["user_id"];
 $user_id = 2;//for testing
+//need fetch user for phpmailer dmit
+$pdo = Database::getConnection();
+$userRepository = new UserRepository($pdo);
+$currentUser = $userRepository->getUserById($user_id);
+
+
 try {
     if($_SERVER["REQUEST_METHOD"] == "POST"){
        $categoryChosen =  $_POST['ticket'];
        $quantity =  $_POST['qtyInput'];
-       $pdo = Database::getConnection();
          //check constraints
          //insert reservation
          //insert ticket
@@ -38,11 +49,19 @@ try {
             $reservationRepo= new ReservationRepository($pdo);
             $ticketRepository = new TicketRepository($pdo);
             $reservation->setId($reservationRepo->createReservation($reservation));
+            $option = new \Dompdf\Options();
+            $generator = new GeneratePdf($option);
+            $phpmailer =new PhpMailerSet();
+            $sendService =new SendEmailService($phpmailer,$generator);
             for ($i=0; $i < $quantity; $i++) {
                 $ticket = new Ticket($reservation->getId(),$category->getId(),$category->getPrice());
-                $ticketRepository->createTicket($ticket);
+                $ticket->setId($ticketRepository->createTicket($ticket));
+                $sendService->sendTicket($ticket->getId(),$currentUser->getEmail(),"your Tiket","congratulations ticket");
             }
             $pdo->commit();
+
+
+
         }
 
 
