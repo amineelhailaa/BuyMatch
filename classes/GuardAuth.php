@@ -12,14 +12,17 @@ class GuardAuth
     }
 
     private static array $dashboard = [
-        'acheteur' => 'Location: /buymatch/pages/matches.php',
-        'administrateur' => 'Location: /buymatch/pages/admin/dashboard.php',
-        'organisateur' => 'Location: /buymatch/pages/organizer/dashboard.php',
+        'acheteur' => 'Location: tickets.php',
+        'administrateur' => 'Location: admin/dashboard.php',
+        'organisateur' => 'Location: organizer/dashboard.php',
     ];
 
     public static function getUserId(): ?int
     {
-        return $_SESSION['id'];
+        if(isset($_SESSION["id"])){
+            return $_SESSION["id"];
+        }
+        return null;
     }
 
     public static function getRole(): ?string
@@ -30,7 +33,7 @@ class GuardAuth
     public static function isLoggedIn()
     {
         if (!self::getUserId()) {
-            header('location: buymatch/pages/login.php');
+            header('location: login.php');
             exit();
         }
     }
@@ -45,10 +48,12 @@ class GuardAuth
 
     public static function redirectToDashboard()
     {
-        self::isLoggedIn();
-        $role = self::getRole();
-        header(self::$dashboard[$role]);
-        exit();
+        if(self::getUserId()){
+            $role = self::getRole();
+            header(self::$dashboard[$role]);
+            exit();
+        }
+
     }
 
 

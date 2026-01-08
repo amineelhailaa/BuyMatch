@@ -1,9 +1,12 @@
 <?php
-
+session_start();
 require_once "../../config/database.php";
 require_once "../../classes/Utilisateur.php";
 require_once "../../classes/UserMaker.php";
 require_once "../../repo/userRepository.php";
+require_once "../../classes/GuardAuth.php";
+GuardAuth::requireRole('administrateur');
+
 
 $repo = new UserRepository(Database::getConnection());
 

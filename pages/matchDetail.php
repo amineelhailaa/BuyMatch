@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -12,8 +13,11 @@ require_once "../classes/CommentMaker.php";
 require_once "../repo/MatchRepository.php";
 require_once "../repo/CategoryRepository.php";
 require_once "../repo/CommentRepository.php";
+require_once "../classes/GuardAuth.php";
 
-$userId = 2;
+GuardAuth::requireRole('acheteur');
+
+$userId = GuardAuth::getUserId();
 $pdo = Database::getConnection();
 $matchId = $_GET['match_id'];
 try {

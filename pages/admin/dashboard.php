@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+require_once "../../classes/GuardAuth.php";
+
+
+GuardAuth::requireRole('administrateur');
+
+?>
+
+
+
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>

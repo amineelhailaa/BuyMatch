@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -10,11 +10,15 @@ require_once "../../classes/Team.php";
 require_once "../../classes/Match.php";
 require_once "../../repo/MatchRepository.php";
 require_once "../../repo/CategoryRepository.php";
+require_once "../../classes/GuardAuth.php";
+
+GuardAuth::requireRole('organisateur');
 
 //khsni redirect hna
 
-//$organizer_id= $_SESSION['user_id'];
-$organizer_id= 3; //for testing
+
+
+$organizer_id= GuardAuth::getUserId();
 
 try {
 

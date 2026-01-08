@@ -1,8 +1,10 @@
 <?php
+session_start();
+require_once "../../classes/GuardAuth.php";
 require_once "../../classes/MatchSummary.php";
 require_once "../../config/database.php";
 require_once "../../repo/MatchRepository.php";
-
+GuardAuth::requireRole('administrateur');
 $repo= new MatchRepository(Database::getConnection());
 
 

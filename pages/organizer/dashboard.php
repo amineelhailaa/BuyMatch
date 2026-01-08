@@ -1,13 +1,14 @@
 <?php
+session_start();
 require_once "../../classes/MatchSummary.php";
-
-
-
-$organizer_id = 3; //fortesting
 require_once "../../config/database.php";
 require_once "../../repo/MatchRepository.php";
+require_once "../../classes/GuardAuth.php";
+GuardAuth::requireRole('organisateur');
+$organizer_id = GuardAuth::getUserId();
 $matchrepo = new MatchRepository(Database::getConnection());
 $matchList = $matchrepo->myMatches($organizer_id);
+
 
 
 

@@ -1,15 +1,21 @@
 <?php
-session_start();
-require_once "../auth/authentication.php";
 
-if(isset($_SESSION['id'])){
-    header("location: ../index.php"); //to fix after
-    exit();
-}
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+session_start();
+
+
+require_once "../auth/authentication.php";
+require_once "../classes/GuardAuth.php";
+
+
+
+GuardAuth::redirectToDashboard();
+$error= null;
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-    $error= null;
     if(authentication::login($_POST["email"], $_POST["password"])){
-        header("location: ");//still need header
+        GuardAuth::redirectToDashboard();
         exit();
     }
 
@@ -195,7 +201,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                 name="email"
                                 type="email"
                                 autocomplete="email"
-                                placeholder="Enter your email"
+                                placeholder="<?php echo $error? $error : "enter your email" ;   ?>"
                                 required
                                 class="w-full rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-4 text-sm text-white placeholder:text-zinc-500
                            outline-none transition

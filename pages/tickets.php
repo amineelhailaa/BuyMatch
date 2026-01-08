@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -11,10 +12,12 @@ require_once "../config/database.php";
 require_once "../classes/Reservation.php";
 require_once "../classes/Ticket.php";
 require_once "../repo/ReservationRepository.php";
+require_once "../classes/GuardAuth.php";
 
+GuardAuth::requireRole('acheteur');
 
 $pdo = Database::getConnection();
-$user_id = 2;
+$user_id = GuardAuth::getUserId();
 
 ?>
 

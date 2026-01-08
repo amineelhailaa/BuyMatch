@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -15,8 +16,10 @@ require_once "../repo/ReservationRepository.php";
 require_once "../repo/userRepository.php";
 require_once "../generatePdf/GeneratePdf.php";
 require_once "../generatePdf/sendEmailService.php";
+require_once "../classes/GuardAuth.php";
 
 
+GuardAuth::requireRole('acheteur');
 
 
 
@@ -24,7 +27,7 @@ require_once "../generatePdf/sendEmailService.php";
 
 $match_id = $_GET['id'];
 //$user_id = $_SESSION["user_id"];
-$user_id = 2;//for testing
+$user_id = GuardAuth::getUserId();//for testing
 //need fetch user for phpmailer dmit
 $pdo = Database::getConnection();
 $userRepository = new UserRepository($pdo);

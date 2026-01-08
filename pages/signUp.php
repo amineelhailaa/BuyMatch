@@ -1,11 +1,14 @@
 <?php
 require_once "../auth/authentication.php";
 require_once "../classes/UploadPic.php";
+require_once "../classes/GuardAuth.php";
 session_start();
-if(isset($_SESSION['id'])){
-    header("location: ../index.php"); //to fix after
-    exit();
-}
+
+
+
+GuardAuth::redirectToDashboard();
+
+
 //neeeeeeeeeeeeeeed guards
 
 try {

@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -13,7 +14,10 @@ require_once "../repo/MatchRepository.php";
 require_once "../repo/CategoryRepository.php";
 require_once "../repo/userRepository.php";
 require_once "../repo/CommentRepository.php";
-$userid = 4;
+require_once "../classes/GuardAuth.php";
+
+GuardAuth::isLoggedIn();
+$userid = GuardAuth::getUserId();
 
 
 
