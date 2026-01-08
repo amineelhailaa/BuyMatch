@@ -26,7 +26,6 @@ GuardAuth::requireRole('acheteur');
 
 
 $match_id = $_GET['id'];
-//$user_id = $_SESSION["user_id"];
 $user_id = GuardAuth::getUserId();//for testing
 //need fetch user for phpmailer dmit
 $pdo = Database::getConnection();
@@ -168,13 +167,13 @@ try {
 
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="#home">Home</a>
-                <a class="hover:text-white transition" href="#matches">Matches</a>
-                <a class="inline-flex items-center gap-2 hover:text-white transition" href="#login">
+                <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
+                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/login.php">
                     <span aria-hidden="true">↗</span> Login
                 </a>
                 <a
                         class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                        href="#register"
+                        href="/buymatch/pages/signUp.php"
                 >Register</a
                 >
             </nav>
@@ -194,11 +193,11 @@ try {
         <div id="mobileMenu" class="md:hidden hidden border-t border-white/5 bg-zinc-950/80 backdrop-blur">
             <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-zinc-300">
                 <a class="hover:text-white transition" href="#home">Home</a>
-                <a class="hover:text-white transition" href="#matches">Matches</a>
-                <a class="hover:text-white transition" href="#login">Login</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/login.php">Login</a>
                 <a
                         class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                        href="#register"
+                        href="/buymatch/pages/signUp.php"
                 >Register</a
                 >
             </div>
@@ -210,7 +209,8 @@ try {
         <section class="mx-auto max-w-6xl px-4 py-10 md:py-14">
             <!-- Back -->
             <a
-                    href="#"
+                    href="/buymatch/pages/matchDetail.php?match_id=<?= $match_id ?>"
+
                     class="inline-flex items-center gap-2 text-sm text-zinc-300 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/25 rounded-lg px-2 py-1"
             >
                 <span class="text-zinc-400" aria-hidden="true">←</span>
@@ -234,7 +234,7 @@ try {
                                 class="group/logo relative grid h-11 w-11 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
                          transition duration-200
                          hover:ring-brand-500/70 hover:shadow-[0_0_0_1px_rgba(255,122,0,.25),0_18px_45px_rgba(255,122,0,.14)]
-                         hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-brand-500/25"
+                         hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-brand-500/25 overflow-hidden"
                                 title="Real Madrid"
                                 aria-label="Real Madrid logo"
                         >
@@ -255,7 +255,7 @@ try {
                         <!-- right team -->
                         <button
                                 type="button"
-                                class="group/logo relative grid h-11 w-11 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
+                                class="group/logo relative grid h-11 w-11 overflow-hidden place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15
                          transition duration-200
                          hover:ring-brand-500/70 hover:shadow-[0_0_0_1px_rgba(255,122,0,.25),0_18px_45px_rgba(255,122,0,.14)]
                          hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-brand-500/25"
@@ -263,7 +263,7 @@ try {
                                 aria-label="Barcelona logo"
                         >
                             <!-- CHANGED: abbreviation -> img -->
-                            <img src="../uploads/<?= $match->getTeam2Logo() ?>" alt="Team 2" class="team-logo h-full w-full rounded-full object-cover" />
+                            <img src="../uploads/<?= $match->getTeam2Logo() ?>" alt="Team 2" class="team-logo h-full w-full rounded-full " />
 
                             <span class="pointer-events-none absolute inset-0 rounded-full opacity-0 transition group-hover/logo:opacity-100">
                                 <span class="absolute inset-[-8px] rounded-full bg-brand-500/10 blur-xl"></span>

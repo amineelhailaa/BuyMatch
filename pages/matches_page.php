@@ -1,5 +1,4 @@
 <?php
-session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -10,7 +9,6 @@ require_once "../repo/MatchRepository.php";
 require_once "../classes/MatchSummary.php";
 require_once "../classes/GuardAuth.php";
 
-GuardAuth::requireRole('acheteur');
 
 $repo = new MatchRepository(Database::getConnection());
 ?>
@@ -98,13 +96,13 @@ $repo = new MatchRepository(Database::getConnection());
 
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="#home">Home</a>
-                <a class="hover:text-white transition" href="#matches">Matches</a>
-                <a class="inline-flex items-center gap-2 hover:text-white transition" href="#login">
+                <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
+                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/login.php">
                     <span aria-hidden="true">↗</span> Login
                 </a>
                 <a
                         class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                        href="#register"
+                        href="/buymatch/pages/signUp.php"
                 >Register</a
                 >
             </nav>
@@ -124,11 +122,11 @@ $repo = new MatchRepository(Database::getConnection());
         <div id="mobileMenu" class="md:hidden hidden border-t border-white/5 bg-zinc-950/80 backdrop-blur">
             <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-zinc-300">
                 <a class="hover:text-white transition" href="#home">Home</a>
-                <a class="hover:text-white transition" href="#matches">Matches</a>
-                <a class="hover:text-white transition" href="#login">Login</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/login.php">Login</a>
                 <a
                         class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                        href="#register"
+                        href="/buymatch/pages/signUp.php"
                 >Register</a
                 >
             </div>
