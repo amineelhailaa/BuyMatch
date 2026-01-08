@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
-
+require_once "../classes/Comment.php";
 require_once "../config/database.php";
 require_once "../classes/MatchSummary.php";
 require_once "../classes/Category.php";
@@ -17,6 +17,14 @@ $userId = 2;
 $pdo = Database::getConnection();
 $matchId = $_GET['match_id'];
 try {
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        $comment = new Comment($userId,$matchId,$_POST['content']);
+
+        $commentRepo = new CommentRepository($pdo);
+        $commentRepo->addComment($comment);
+    }
+
     $matchRepository = new MatchRepository($pdo);
     $match = $matchRepository->getMatcheById($matchId);
     $categoryRepo = new CategoryRepository($pdo);
@@ -378,7 +386,7 @@ try {
                   />
                 </svg>
               </span>
-                    Comments (3)
+
                 </div>
 
                 <div class="mt-4 rounded-xl border border-white/10 bg-zinc-900/30 px-4 py-4 text-center text-xs text-zinc-500">
@@ -386,7 +394,6 @@ try {
                 </div>
 
                 <div class="mt-4 space-y-3">
-                    <!-- Comment 1 -->
                     <!-- Comment form -->
                     <form action="" method="POST" class="mt-4">
 
@@ -423,8 +430,8 @@ try {
 
 
                     <?php
-                    $commentReop = new CommentRepository($pdo);
-                    $comments = $commentReop->getComments($matchId);
+                    $commentRepo = new CommentRepository($pdo);
+                    $comments = $commentRepo->getComments($matchId);
                     foreach($comments as $comment):
                     ?>
 

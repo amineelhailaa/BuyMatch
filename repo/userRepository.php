@@ -1,6 +1,5 @@
 <?php
 
-use classes\Utilisateur;
 
 require_once __DIR__."/../config/database.php";
 require_once __DIR__."/../classes/Utilisateur.php";
@@ -79,6 +78,13 @@ class userRepository
             return UserMaker::rightPerson($row);
         }
         return null;
+    }
+
+
+    public function updateUser(Utilisateur $user){
+        $query = "UPDATE utilisateur set nom = ?, email = ?, password = ?,phone=? , status=? where id = ?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($user->getName(),$user->getEmail(),$user->getPasswordHash(),$user->getPhone(),$user->getStatus(),$user->getId()));
     }
 
 }

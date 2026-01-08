@@ -1,3 +1,50 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+require_once "../classes/Comment.php";
+require_once "../config/database.php";
+require_once "../classes/MatchSummary.php";
+require_once "../classes/Category.php";
+require_once "../classes/GuardAuth.php";
+require_once "../classes/CommentRule.php";
+require_once "../classes/CommentMaker.php";
+require_once "../repo/MatchRepository.php";
+require_once "../repo/CategoryRepository.php";
+require_once "../repo/userRepository.php";
+require_once "../repo/CommentRepository.php";
+$userid = 4;
+
+
+
+$pdo = Database::getConnection();
+$userRepo = new userRepository($pdo);
+$user = $userRepo->getUserById($userid);
+
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        $user->setName($_POST["nom"]);
+        $user->setEmail($_POST["email"]);
+        if($_POST['password']!="********"){
+            $user->setPasswordHash(password_hash($_POST['password'],PASSWORD_DEFAULT));
+        }
+
+        $user->setPhone($_POST["phone"]);
+        $userRepo->updateUser($user);
+    }
+
+
+
+
+
+
+
+?>
+
+
+
+
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -131,53 +178,59 @@
                     <!-- Header row -->
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex items-center gap-4">
-                            <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/40 ring-1 ring-brand-500/30">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path
-                                        d="M20 21a8 8 0 1 0-16 0"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        class="text-zinc-400"
-                                    />
-                                    <path
-                                        d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        class="text-zinc-400"
-                                    />
-                                </svg>
+                            <div class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/40 ring-1 ring-brand-500/30 overflow-hidden">
+                               <img src="../uploads/<?= $user->getPic() ?>" class="h-12 w-12  cover">
                             </div>
 
                             <div class="text-left">
-                                <div class="font-display text-lg text-white">John Doe</div>
+                                <div class="font-display text-lg text-white"><?= $user->getName() ?> </div>
                                 <div class="mt-1 text-xs text-zinc-400">Account details</div>
                             </div>
                         </div>
 
                         <!-- Edit / Save button (starts NOT orange) -->
+<!--                        <button-->
+<!--                            type="button"-->
+<!--                            id="editBtn"-->
+<!--                            class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-zinc-200-->
+<!--                         transition hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-brand-500/20"-->
+<!--                            aria-pressed="false"-->
+<!--                        >-->
+<!--                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
+<!--                                <path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
+<!--                                <path-->
+<!--                                    d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"-->
+<!--                                    stroke="currentColor"-->
+<!--                                    stroke-width="2"-->
+<!--                                    stroke-linejoin="round"-->
+<!--                                />-->
+<!--                            </svg>-->
+<!--                            <span id="editBtnLabel">Edit</span>-->
+<!--                        </button>-->
+                    </div>
+
+                    <!-- Inputs (LOCKED until Edit clicked) -->
+                    <form id="profileForm" class="mt-6 space-y-4" autocomplete="on" method="post">
+
+
                         <button
-                            type="button"
-                            id="editBtn"
-                            class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-zinc-200
+                                type="button"
+                                id="editBtn"
+                                class="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-zinc-200
                          transition hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-brand-500/20"
-                            aria-pressed="false"
+                                aria-pressed="false"
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="M12 20h9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                                 <path
-                                    d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linejoin="round"
+                                        d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linejoin="round"
                                 />
                             </svg>
                             <span id="editBtnLabel">Edit</span>
                         </button>
-                    </div>
-
-                    <!-- Inputs (LOCKED until Edit clicked) -->
-                    <form id="profileForm" class="mt-6 space-y-4" autocomplete="on">
                         <!-- Full Name -->
                         <div>
                             <label for="fullName" class="block text-xs font-semibold text-zinc-200">Full Name</label>
@@ -190,9 +243,9 @@
                     </span>
                                 <input
                                     id="fullName"
-                                    name="fullName"
+                                    name="nom"
                                     type="text"
-                                    value="John Doe"
+                                    value="<?= $user->getName() ?>"
                                     readonly
                                     class="profile-input w-full rounded-xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white
                              outline-none transition focus:ring-4 focus:ring-brand-500/15 focus:border-brand-500/30
@@ -215,7 +268,7 @@
                                     id="email"
                                     name="email"
                                     type="email"
-                                    value="john.doe@example.com"
+                                    value="<?= $user->getEmail() ?>"
                                     readonly
                                     class="profile-input w-full rounded-xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white
                              outline-none transition focus:ring-4 focus:ring-brand-500/15 focus:border-brand-500/30
@@ -238,7 +291,7 @@
                                     id="password"
                                     name="password"
                                     type="password"
-                                    value="password123"
+                                    value="********"
                                     readonly
                                     class="profile-input w-full rounded-xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white
                              outline-none transition focus:ring-4 focus:ring-brand-500/15 focus:border-brand-500/30
@@ -289,7 +342,7 @@
                                     id="phone"
                                     name="phone"
                                     type="tel"
-                                    value="+1 (555) 123-4567"
+                                    value="<?= $user->getPhone() ?>"
                                     readonly
                                     class="profile-input w-full rounded-xl border border-white/10 bg-white/5 px-10 py-3 text-sm text-white
                              outline-none transition focus:ring-4 focus:ring-brand-500/15 focus:border-brand-500/30
@@ -303,6 +356,7 @@
                             Click <span class="text-zinc-300">Edit</span> to unlock fields.
                         </p>
                     </form>
+
                 </div>
             </div>
         </section>
@@ -446,9 +500,11 @@
             editBtn.classList.add("bg-brand-500", "text-zinc-950", "shadow-glow", "hover:bg-brand-600");
             editBtnLabel.textContent = "Save";
             hintText.textContent = "Make changes, then click Save.";
+            editBtn.setAttribute('type', 'button');
             // Focus first input for better UX
             setTimeout(() => inputs[0]?.focus(), 0);
         } else {
+            editBtn.setAttribute('type', 'submit');
             editBtn.classList.add("border-white/10", "bg-white/5", "text-zinc-200", "hover:bg-white/10");
             editBtn.classList.remove("bg-brand-500", "text-zinc-950", "shadow-glow", "hover:bg-brand-600");
             editBtnLabel.textContent = "Edit";

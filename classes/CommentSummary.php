@@ -6,8 +6,8 @@ class CommentSummary
     private int $user_id;
     private int $id_match;
     private string $comment;
-    private DateTime $date;
-    private $commentOwner;
+    private string $date;
+    private string $commentOwner;
     public function __construct($user_id, $id_match, $comment, $date,$commentOwner,?int $id = null){
         $this->user_id = $user_id;
         $this->id_match = $id_match;
@@ -20,8 +20,8 @@ class CommentSummary
     public function getUserId(): ?int { return $this->user_id; }
     public function getIdMatch(): ?int { return $this->id_match; }
     public function getComment(): ?string { return $this->comment; }
-    public function getDate(): ?DateTime { return $this->date; }
-    public function getCommentOwner(): ?int { return $this->commentOwner; }
+    public function getDate(): ?string { return $this->date; }
+    public function getCommentOwner(): ?string { return $this->commentOwner; }
     public function setId(int $id): void
     {
         $this->id = $id;

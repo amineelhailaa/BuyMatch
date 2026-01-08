@@ -6,8 +6,8 @@ class Comment
     private int $user_id;
     private int $id_match;
     private string $comment;
-    private DateTime $date;
-    public function __construct($user_id, $id_match, $comment, $date,?int $id = null){
+    private ?DateTime $date;
+    public function __construct($user_id, $id_match, $comment, $date=null,?int $id = null){
         $this->user_id = $user_id;
         $this->id_match = $id_match;
         $this->comment = $comment;

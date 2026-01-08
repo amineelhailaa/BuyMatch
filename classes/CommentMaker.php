@@ -6,7 +6,7 @@ class CommentMaker
 
     public static function makeComment($row)
     {
-        return new CommentSummary($row['user_id'],$row['id_match'],$row['comment'],$row['date'],$row['username'],$row['id']);
+        return new CommentSummary($row['user_id'],$row['id_match'],$row['comment'],$row['createdAt'],$row['username'],$row['id']);
 
     }
 

@@ -18,7 +18,7 @@ class CommentRepository
 
 
     public function getComments(int $idMatch){
-        $query= "select *,u.nom as username from commentaire c join utilisateur u on c.user_id=u.nom where id_match = ?";
+        $query= "select *,u.nom as username from commentaire c join utilisateur u on c.user_id=u.id where id_match = ?";
         $statement = $this->pdo->prepare($query);
         $statement->execute(array($idMatch));
         $rows = $statement->fetchAll();

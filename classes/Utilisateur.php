@@ -62,7 +62,7 @@ public function __construct($name, $email, $password_hash, $phone, $status, $pic
         $this->phone = $phone;
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
