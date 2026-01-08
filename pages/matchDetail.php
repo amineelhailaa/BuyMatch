@@ -15,9 +15,13 @@ require_once "../repo/CategoryRepository.php";
 require_once "../repo/CommentRepository.php";
 require_once "../classes/GuardAuth.php";
 
+
 GuardAuth::requireRole('acheteur');
 
+
 $userId = GuardAuth::getUserId();
+
+
 $pdo = Database::getConnection();
 $matchId = $_GET['match_id'];
 try {
