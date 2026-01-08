@@ -9,7 +9,7 @@ class PurchaseRule
     public static function check($category_id, $quantity)
     {
 //        $user_id = $_SESSION["user_id"]; //warning
-        $user_id=2; ///must change warning
+        $user_id=3; ///must change warning
         $pdo = Database::getConnection();
         $repoTicket = new TicketRepository($pdo);
         $repoCategory = new CategoryRepository($pdo);

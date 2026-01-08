@@ -1,21 +1,40 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+
 require_once "../config/database.php";
 require_once "../classes/MatchSummary.php";
 require_once "../classes/Category.php";
+require_once "../classes/GuardAuth.php";
+require_once "../classes/CommentRule.php";
+require_once "../classes/CommentMaker.php";
 require_once "../repo/MatchRepository.php";
 require_once "../repo/CategoryRepository.php";
+require_once "../repo/CommentRepository.php";
 
+$userId = 2;
+$pdo = Database::getConnection();
 $matchId = $_GET['match_id'];
 try {
-    $matchRepository = new MatchRepository(Database::getConnection());
+    $matchRepository = new MatchRepository($pdo);
     $match = $matchRepository->getMatcheById($matchId);
-    $categoryRepo = new CategoryRepository(Database::getConnection());
+    $categoryRepo = new CategoryRepository($pdo);
     $categories = $categoryRepo->getCategoriesByMatchId($matchId);
+    $canComment = true;
+    if(!CommentRule::checkCanComment($userId,$matchId)) {
+        $canComment = false;
+    }
+    if (!CommentRule::matchCommentable($matchId)){
+        $canComment = false;
+    }
 
 
 }catch (Throwable $exception){
     echo $exception->getMessage();
 }
+
+
 ?>
 
 
@@ -368,6 +387,47 @@ try {
 
                 <div class="mt-4 space-y-3">
                     <!-- Comment 1 -->
+                    <!-- Comment form -->
+                    <form action="" method="POST" class="mt-4">
+
+
+                        <div class="rounded-xl border border-white/10 bg-zinc-900/30 p-4">
+                            <label class="block text-xs text-zinc-400 mb-2">Your comment</label>
+
+                            <textarea
+                                    name="content"
+                                    rows="3"
+                                    maxlength="500"
+                                    class="w-full rounded-xl border border-white/10 bg-zinc-950/50 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-brand-500/25
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+                                    placeholder="<?= $canComment ? 'Write your comment here…' : 'Comments are disabled for this match.' ?>"
+            <?= $canComment ? '' : 'disabled' ?>
+            required
+                            ></textarea>
+
+                            <div class="mt-3 flex items-center justify-between gap-3">
+
+                                <button
+                                        type="submit"
+                                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-zinc-950 shadow-glow
+                       transition duration-200 hover:bg-brand-600 hover:-translate-y-[1px] focus:outline-none focus:ring-2 focus:ring-brand-500/25
+                       disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                                        <?= $canComment ? '' : 'disabled' ?>
+                                >
+                                    Post Comment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                    <?php
+                    $commentReop = new CommentRepository($pdo);
+                    $comments = $commentReop->getComments($matchId);
+                    foreach($comments as $comment):
+                    ?>
+
                     <article class="rounded-xl border border-white/10 bg-zinc-900/30 p-4">
                         <div class="flex items-start gap-3">
                             <div class="grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 text-zinc-300">
@@ -379,55 +439,19 @@ try {
 
                             <div class="min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <div class="text-sm font-semibold text-white">John Doe</div>
+                                    <div class="text-sm font-semibold text-white"><?= $comment->getCommentOwner() ?></div>
                                 </div>
                                 <p class="mt-2 text-sm text-zinc-300">
-                                    Amazing match! The atmosphere was incredible. Real Madrid fans were absolutely electric throughout the game.
-                                </p>
-                                <div class="mt-2 text-xs text-zinc-500">January 16, 2025</div>
+                                    <?= $comment->getComment() ?>                                </p>
+                                <div class="mt-2 text-xs text-zinc-500"><?= $comment->getDate() ?></div>
                             </div>
                         </div>
                     </article>
+                    <?php
+                    endforeach;
+                    ?>
 
-                    <!-- Comment 2 -->
-                    <article class="rounded-xl border border-white/10 bg-zinc-900/30 p-4">
-                        <div class="flex items-start gap-3">
-                            <div class="grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 text-zinc-300">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                </svg>
-                            </div>
 
-                            <div class="min-w-0">
-                                <div class="text-sm font-semibold text-white">Maria Garcia</div>
-                                <p class="mt-2 text-sm text-zinc-300">
-                                    Best experience ever! The stadium was packed and the energy was unmatched. Already looking forward to the next one!
-                                </p>
-                                <div class="mt-2 text-xs text-zinc-500">January 16, 2025</div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Comment 3 -->
-                    <article class="rounded-xl border border-white/10 bg-zinc-900/30 p-4">
-                        <div class="flex items-start gap-3">
-                            <div class="grid h-9 w-9 place-items-center rounded-full bg-white/5 ring-1 ring-white/10 text-zinc-300">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                                    <path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />
-                                </svg>
-                            </div>
-
-                            <div class="min-w-0">
-                                <div class="text-sm font-semibold text-white">Carlos Martinez</div>
-                                <p class="mt-2 text-sm text-zinc-300">
-                                    What a game! Both teams played their hearts out. The VIP seats were worth every penny.
-                                </p>
-                                <div class="mt-2 text-xs text-zinc-500">January 17, 2025</div>
-                            </div>
-                        </div>
-                    </article>
                 </div>
             </section>
         </section>

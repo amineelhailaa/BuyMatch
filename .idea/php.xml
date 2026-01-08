@@ -15,6 +15,19 @@
       <phpcs_by_interpreter asDefaultInterpreter="true" interpreter_id="85976c6f-2b38-4032-b6a2-d3914e8fb53c" timeout="30000" />
     </phpcs_settings>
   </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/thecodingmachine/safe" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/composer" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/dompdf/php-font-lib" />
+      <path value="$PROJECT_DIR$/generatePdf/vendor/dompdf/php-svg-lib" />
+    </include_path>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.5" />
   <component name="PhpStan">
     <PhpStan_settings>

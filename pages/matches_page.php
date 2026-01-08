@@ -11,8 +11,6 @@ require_once "../classes/MatchSummary.php";
 
 
 $repo = new MatchRepository(Database::getConnection());
-
-
 ?>
 
 

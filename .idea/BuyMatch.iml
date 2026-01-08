@@ -3,6 +3,15 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/dompdf/dompdf" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/dompdf/php-font-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/dompdf/php-svg-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/masterminds/html5" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/sabberworm/php-css-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/generatePdf/vendor/thecodingmachine/safe" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpmailer/phpmailer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

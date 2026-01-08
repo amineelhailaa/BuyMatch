@@ -21,6 +21,7 @@ class TicketRepository
         $stmt->execute(array($userId, $matchId));
         return $stmt->fetchColumn();
     }
+
     public function getCount($category_id){
         $query = "select count(*) from ticket where id_category=?";
         $stmt = $this->pdo->prepare($query);
@@ -36,5 +37,18 @@ class TicketRepository
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return new Ticket($row['id_reservation'],$row['id_category'],$row['price'],$row['id']);
     }
+
+
+    public function UserHaveTicket($userID,$ticketId)
+    {
+        $query = "SELECT COUNT(*) FROM ticket t join reservation r on t.id_reservation=r.id where r.user_id=? and t.id=?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($userID,$ticketId));
+        if($stmt->fetchColumn()!=0){
+            return true;
+        }
+        return false;
+    }
+
 
 }
