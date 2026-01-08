@@ -12,9 +12,9 @@ class GuardAuth
     }
 
     private static array $dashboard = [
-        'acheteur' => 'Location: tickets.php',
-        'administrateur' => 'Location: admin/dashboard.php',
-        'organisateur' => 'Location: organizer/dashboard.php',
+        'acheteur' => 'Location: /buymatch/pages/tickets.php',
+        'administrateur' => 'Location: /buymatch/pages/admin/dashboard.php',
+        'organisateur' => 'Location: /buymatch/pages/organizer/dashboard.php',
     ];
 
     public static function getUserId(): ?int
@@ -33,7 +33,7 @@ class GuardAuth
     public static function isLoggedIn()
     {
         if (!self::getUserId()) {
-            header('location: login.php');
+            header("Location: /buymatch/pages/login.php");
             exit();
         }
     }

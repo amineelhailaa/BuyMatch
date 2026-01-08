@@ -3,10 +3,13 @@ session_start();
 require_once "../../classes/MatchSummary.php";
 require_once "../../config/database.php";
 require_once "../../repo/MatchRepository.php";
+require_once "../../repo/TicketRepository.php";
 require_once "../../classes/GuardAuth.php";
 GuardAuth::requireRole('organisateur');
 $organizer_id = GuardAuth::getUserId();
-$matchrepo = new MatchRepository(Database::getConnection());
+$pdo = Database::getConnection();
+$matchrepo = new MatchRepository($pdo);
+$ticketRepo = new TicketRepository($pdo);
 $matchList = $matchrepo->myMatches($organizer_id);
 
 
@@ -205,7 +208,9 @@ $matchList = $matchrepo->myMatches($organizer_id);
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Tickets Sold</div>
-                            <div class="mt-1 font-display text-3xl text-white">3,450</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?php
+                                echo $ticketRepo->getTicketCountByOrganizerId($organizer_id);
+                                ?></div>
                             <div class="mt-2 text-xs text-ok-500">+23% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/15 ring-1 ring-brand-500/25">
@@ -230,7 +235,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Total Revenue</div>
-                            <div class="mt-1 font-display text-3xl text-white">$125,000</div>
+                            <div class="mt-1 font-display text-3xl text-white">$ <?= $ticketRepo->getEarningByOrganizerId($organizer_id) ?></div>
                             <div class="mt-2 text-xs text-ok-500">+18% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/15 ring-1 ring-emerald-500/25">

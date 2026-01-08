@@ -140,4 +140,21 @@ class MatchRepository
             $rows = $stmt->fetch(PDO::FETCH_ASSOC);
             return MatchSummary::fromRows($rows);
         }
+
+        public function countMatches()
+        {
+            $query = "select count(*) from matches";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        }
+
+
+        public function countPendingMatches()
+        {
+            $query = "select count(*) from matches where status = 'in progress'";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        }
 }

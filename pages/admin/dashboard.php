@@ -2,9 +2,22 @@
 session_start();
 
 require_once "../../classes/GuardAuth.php";
+require_once "../../config/database.php";
+require_once "../../repo/userRepository.php";
+require_once "../../repo/TicketRepository.php";
+require_once "../../repo/MatchRepository.php";
+require_once "../../repo/ReservationRepository.php";
 
+$pdo = Database::getConnection();
+$userRepo = new UserRepository($pdo);
+$matchRepo = new MatchRepository($pdo);
+$ticketRepo = new TicketRepository($pdo);
+$reservationRepo = new ReservationRepository($pdo);
 
 GuardAuth::requireRole('administrateur');
+
+
+
 
 ?>
 
@@ -158,7 +171,13 @@ GuardAuth::requireRole('administrateur');
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Total Users</div>
-                            <div class="mt-1 font-display text-3xl text-white">15,420</div>
+                            <div class="mt-1 font-display text-3xl text-white">
+                                <?=
+                                $userRepo->countUsers('acheteur')
+
+                                ?>
+
+                            </div>
                             <div class="mt-2 text-xs text-emerald-400">+12% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/15 ring-1 ring-brand-500/25">
@@ -179,7 +198,10 @@ GuardAuth::requireRole('administrateur');
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Organizers</div>
-                            <div class="mt-1 font-display text-3xl text-white">234</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?=
+                                $userRepo->countUsers('organisateur')
+
+                                ?></div>
                             <div class="mt-2 text-xs text-emerald-400">+8% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-purple-500/15 ring-1 ring-purple-500/25">
@@ -200,7 +222,9 @@ GuardAuth::requireRole('administrateur');
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Total Matches</div>
-                            <div class="mt-1 font-display text-3xl text-white">89</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?=
+                                $matchRepo->countMatches()
+                                ?></div>
                             <div class="mt-2 text-xs text-emerald-400">+15% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/10 ring-1 ring-white/10">
@@ -221,7 +245,9 @@ GuardAuth::requireRole('administrateur');
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Tickets Sold</div>
-                            <div class="mt-1 font-display text-3xl text-white">45,230</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?=
+                                $ticketRepo->countTickets()
+                                ?></div>
                             <div class="mt-2 text-xs text-emerald-400">+23% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/15 ring-1 ring-brand-500/25">
@@ -246,7 +272,9 @@ GuardAuth::requireRole('administrateur');
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Total Revenue</div>
-                            <div class="mt-1 font-display text-3xl text-white">$2.15M</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?=
+                                $reservationRepo->countTotalEarning()
+                                ?></div>
                             <div class="mt-2 text-xs text-emerald-400">+18% from last month</div>
                         </div>
                         <div class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-500/15 ring-1 ring-emerald-500/25">
@@ -272,7 +300,7 @@ GuardAuth::requireRole('administrateur');
                     <div class="flex items-start justify-between">
                         <div>
                             <div class="text-xs text-zinc-300">Pending Requests</div>
-                            <div class="mt-1 font-display text-3xl text-white">5</div>
+                            <div class="mt-1 font-display text-3xl text-white"><?= $matchRepo->countPendingMatches() ?></div>
                             <a href="#" class="mt-2 inline-flex items-center gap-2 text-xs text-red-300 hover:text-red-200 transition">
                                 Review Now <span aria-hidden="true">→</span>
                             </a>

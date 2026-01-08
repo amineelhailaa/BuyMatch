@@ -12,4 +12,12 @@ public function __construct(PDO $pdo){ $this->pdo = $pdo; }
       $statement->execute(array($reservation->getUserId(), $reservation->getIdMatch(), $reservation->getTotalPrice()));
        return $this->pdo->lastInsertId();
     }
+
+
+    public function countTotalEarning(){
+    $query = "select sum(total_price) from reservation";
+    $statement=$this->pdo->prepare($query);
+    $statement->execute();
+    return $statement->fetchColumn();
+    }
 }

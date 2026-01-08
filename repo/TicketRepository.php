@@ -28,6 +28,13 @@ class TicketRepository
         $stmt->execute(array($category_id));
         return $stmt->fetchColumn();
     }
+    public function countTickets()
+    {
+        $query = "select count(*) from ticket";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
 
     public function getTicketById($id): ?Ticket
     {
@@ -48,6 +55,22 @@ class TicketRepository
             return true;
         }
         return false;
+    }
+
+
+    public function getTicketCountByOrganizerId($organizerId){
+        $query = "SELECT COUNT(*) FROM ticket t join reservation r on t.id_reservation=r.id join matches m on m.id=r.id_match where m.organizer_id=?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($organizerId));
+        return $stmt->fetchColumn();
+    }
+
+    public function getEarningByOrganizerId($organizerId)
+    {
+        $query = "select sum(r.total_price) from reservation r join matches m on m.id=r.id_match where m.organizer_id=?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($organizerId));
+        return $stmt->fetchColumn()? $stmt->fetchColumn():0;
     }
 
 

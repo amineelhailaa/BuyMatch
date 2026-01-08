@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../repo/TicketRepository.php";
 require_once __DIR__ . "/../repo/CategoryRepository.php";
+require_once __DIR__ . "/../classes/GuardAuth.php";
 
 class PurchaseRule
 {
@@ -8,8 +9,7 @@ class PurchaseRule
 
     public static function check($category_id, $quantity)
     {
-//        $user_id = $_SESSION["user_id"]; //warning
-        $user_id=3; ///must change warning
+        $user_id=GuardAuth::getUserId();
         $pdo = Database::getConnection();
         $repoTicket = new TicketRepository($pdo);
         $repoCategory = new CategoryRepository($pdo);

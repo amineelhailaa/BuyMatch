@@ -67,6 +67,18 @@ class userRepository
         return null;
     }
 
+    public function countUsers($role) {
+        $query = "select count(*) from utilisateur where role = ?";
+        $stmt = $this->con->prepare($query);
+        $stmt->execute(array($role));
+        return $stmt->fetchColumn();
+    }
+
+
+
+
+
+
 
 
     public function getUserById(int $id)
