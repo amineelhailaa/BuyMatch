@@ -2,6 +2,7 @@
 
 class MatchSummary
 {
+    private  $category;
     public function __construct(
         private int $matchId,
         private string $date,      // e.g. 2026-01-04
@@ -16,7 +17,11 @@ class MatchSummary
         private ?string $status,  // pending/validated/rejected (optional)
         private ?string $banner,    // optional if you display it
         private int $organizer_id
+
     ) {}
+
+    public function getCategory() { return $this->category; }
+    public function setCategory( $category) { $this->category = $category; }
     public static function fromRows(array $row): self
     {
         return new self(

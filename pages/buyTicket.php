@@ -61,8 +61,10 @@ try {
                 $sendService->sendTicket($ticket->getId(),$currentUser->getEmail(),"your Tiket","congratulations ticket");
             }
             $pdo->commit();
+        }
 
-
+        else{
+            header("location: /buymatch/404.php");
         }
 
 

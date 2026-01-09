@@ -13,7 +13,7 @@ $match=$matchRepo->getMatchByTicketId($ticketId);
 
 
 $seat = $seat ?? "A-15";
-$category = $category ?? "VIP";
+$category = $match->getCategory() ?? "VIP";
 
 
 ?>

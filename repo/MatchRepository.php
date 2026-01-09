@@ -134,11 +134,13 @@ class MatchRepository
 
         public function getMatchByTicketId($ticket_id)
         {
-            $query = "select * from list_match m join reservation r on r.id_match=m.match_id join ticket k on r.id=k.id_reservation where k.id=?";
+            $query = "select *,tc.label as category from list_match m join reservation r on r.id_match=m.match_id join ticket k on r.id=k.id_reservation join ticket_categorie tc on tc.match_id=m.match_id where k.id=?";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(array($ticket_id));
             $rows = $stmt->fetch(PDO::FETCH_ASSOC);
-            return MatchSummary::fromRows($rows);
+            $matchSum = MatchSummary::fromRows($rows);
+            $matchSum->setCategory($rows['category'] ?? null);
+            return $matchSum;
         }
 
         public function countMatches()
