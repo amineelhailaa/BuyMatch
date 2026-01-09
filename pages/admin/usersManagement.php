@@ -201,16 +201,17 @@ $repo = new UserRepository(Database::getConnection());
                     >4</span
                     >
                 </div>
-
+                <form>
                 <div class="mt-4 space-y-3">
                     <!-- Row -->
+
                     <?php
 
                     $Buyers=$repo->getUsersByRole('acheteur');
                     foreach ($Buyers as $buyer):
                     ?>
 
-                    <form>
+
                     <div
                         class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
                        shadow-[0_22px_55px_rgba(0,0,0,.45)]
@@ -239,7 +240,7 @@ $repo = new UserRepository(Database::getConnection());
                             <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500"><?= $buyer->getRole() ?></span>
                             <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><?= $buyer->getStatus() ?></span>
                         </div>
-                    </div></form>
+                    </div>
                     <?php
                     endforeach;
                     ?>
@@ -339,6 +340,7 @@ $repo = new UserRepository(Database::getConnection());
 <!--                        </div>-->
 <!--                    </div>-->
                 </div>
+                </form>
             </div>
 
             <!-- Organizers -->
