@@ -100,7 +100,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
 
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="#home">Home</a>
-                <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/commentModeration.php">Comments</a>
                 <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/editProfile.php">
                     <span aria-hidden="true">↗</span> Edit Profile
                 </a>
@@ -126,7 +126,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
         <div id="mobileMenu" class="md:hidden hidden border-t border-white/5 bg-zinc-950/80 backdrop-blur">
             <div class="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3 text-sm text-zinc-300">
                 <a class="hover:text-white transition" href="#home">Home</a>
-                <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/commentModeration.php">Comments</a>
                 <a class="hover:text-white transition" href="/buymatch/pages/login.php">Login</a>
                 <a
                     class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
@@ -328,7 +328,7 @@ $matchList = $matchrepo->myMatches($organizer_id);
                         </div>
 
                         <a
-                            href="#"
+                            href="/buymatch/pages/matchDetail.php?match_id=<?= $match->getMatchId()?>"
                             class="mt-5 inline-flex w-full items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10 px-4 py-3 text-sm font-semibold text-brand-500
                          transition hover:bg-brand-500/15 hover:border-brand-500/35 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
                         >

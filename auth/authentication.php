@@ -28,4 +28,9 @@ class authentication
         echo "email problem";
         return false;
     }
+
+
+    public static function logout(): void{
+        session_destroy();
+    }
 }

@@ -16,6 +16,10 @@ class GuardAuth
         'administrateur' => 'Location: /buymatch/pages/admin/dashboard.php',
         'organisateur' => 'Location: /buymatch/pages/organizer/dashboard.php',
     ];
+    public static function getUserPath(){
+       $role= self::getRole();
+       return str_replace("Location: ","",self::$dashboard[$role]);
+    }
 
     public static function getUserId(): ?int
     {

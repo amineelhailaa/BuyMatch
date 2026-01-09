@@ -8,7 +8,7 @@ class CommentSummary
     private string $comment;
     private string $date;
     private string $commentOwner;
-    public function __construct($user_id, $id_match, $comment, $date,$commentOwner,?int $id = null){
+    public function __construct($user_id, $id_match, $comment, $date,$commentOwner, $id ){
         $this->user_id = $user_id;
         $this->id_match = $id_match;
         $this->comment = $comment;
