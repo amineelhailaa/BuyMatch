@@ -255,13 +255,21 @@ $repo = new MatchRepository(Database::getConnection());
                       <path d="M4 8V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2"/>
                     </svg>
                   </span>
-                            <select
+                            <form method="get">
+                            <select name="filter" id="filterDate" onchange="this.form.submit()"
                                     class="w-full appearance-none rounded-xl border border-white/10 bg-zinc-900/40 py-3 pl-11 pr-10 text-sm text-white outline-none transition focus:border-brand-500/40 focus:ring-2 focus:ring-brand-500/15"
                             >
-                                <option>Any Date</option>
-                                <option>January 2025</option>
-                                <option>February 2025</option>
+                                <option value="" >Any Month</option>
+                                <?php
+                                    $months = $repo->getMonths();
+                                    foreach ($months as $month) {
+                                        $dateObj = DateTime::createFromFormat('!m', $month);
+                                        echo '<option value="' . $month . '">' . $dateObj->format('F') . '</option>';
+                                    }
+                                ?>
                             </select>
+                                <script> document.getElementById('filterDate').value = "<?= $_GET['filter'] ?>"; </script>
+                            </form>
                             <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-zinc-400">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -282,7 +290,11 @@ $repo = new MatchRepository(Database::getConnection());
                 <?php
 
                 $matches = $repo->getMatchesByStatus('validated');
-                foreach ($matches as $match):
+                if(!empty($_GET['filter']))
+                {
+                    $matches = $repo->getMatchofMonth($_GET['filter']);
+                }
+                    foreach ($matches as $match):
 
                 ?>
                 <article

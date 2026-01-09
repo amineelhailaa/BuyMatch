@@ -15,15 +15,20 @@ require_once "../repo/ReservationRepository.php";
 require_once "../classes/CommentRule.php";
 require_once "../classes/GuardAuth.php";
 
+$pdo = Database::getConnection();
 GuardAuth::requireRole('acheteur');
+$guard= new GuardAuth($pdo);
+$ticket_id=$_GET['id'];
+if(!$guard->haveAccess($ticket_id)){
+    header('location: /buymatch/404.php');
+    exit();
+}
 
 
 
 
 try {
 
-    $ticket_id=$_GET['id'];
-    $pdo = Database::getConnection();
     $matchRepo = new MatchRepository($pdo);
     $match = $matchRepo->getMatchByTicketId($ticket_id);
 }catch (Exception $e){
