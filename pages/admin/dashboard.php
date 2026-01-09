@@ -114,8 +114,8 @@ GuardAuth::requireRole('administrateur');
                 </a>
                 <a
                     class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 hover:bg-brand-600 transition"
-                    href="/buymatch/pages/signUp.php"
-                >Register</a
+                    href="/buymatch/pages/admin/dashboard.php"
+                >Dashboard</a
                 >
             </nav>
 

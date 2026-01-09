@@ -283,7 +283,7 @@ try {
                         <!-- Category only (REMOVED stadium line under VIP) -->
                         <div class="mt-4 text-center">
                   <span class="inline-flex items-center rounded-full bg-purple-500/15 px-3 py-1 text-[11px] font-semibold text-purple-300 ring-1 ring-purple-500/25">
-                    VIP
+                   <?= $match->getCategory()?>
                   </span>
                         </div>
 

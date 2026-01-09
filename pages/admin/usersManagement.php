@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require_once "../../config/database.php";
 require_once "../../classes/Utilisateur.php";
 require_once "../../classes/UserMaker.php";
@@ -7,8 +8,23 @@ require_once "../../repo/userRepository.php";
 require_once "../../classes/GuardAuth.php";
 GuardAuth::requireRole('administrateur');
 
+$pdo = Database::getConnection();
+$repo = new UserRepository($pdo);
 
-$repo = new UserRepository(Database::getConnection());
+try {
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+        if($_POST['action'] == "active"){
+            $repo->updateStatus($_POST['user_id'],'active');
+
+        }
+        else if($_POST['action'] == "ban"){
+            $repo->updateStatus($_POST['user_id'],'banned');
+        }
+
+    }
+}catch (Throwable $e){
+    echo $e->getMessage();
+}
 
 ?>
 
@@ -113,8 +129,8 @@ $repo = new UserRepository(Database::getConnection());
                 </a>
                 <a
                     class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="/buymatch/pages/signUp.php"
-                >Register</a
+                    href="/buymatch/pages/admin/dashboard.php"
+                >Dashboard</a
                 >
             </nav>
 
@@ -137,9 +153,8 @@ $repo = new UserRepository(Database::getConnection());
                 <a class="hover:text-white transition" href="/buymatch/pages/login.php">Login</a>
                 <a
                     class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="/buymatch/pages/signUp.php"
-                >Register</a
-                >
+                    href="/buymatch/pages/admin/dashboard.php"
+                >Dashboard</a
             </div>
         </div>
     </header>
@@ -188,6 +203,8 @@ $repo = new UserRepository(Database::getConnection());
             </div>
 
             <!-- Buyers -->
+
+
             <div class="mt-8">
                 <div class="flex items-center gap-2">
               <span class="text-brand-500">
@@ -201,16 +218,14 @@ $repo = new UserRepository(Database::getConnection());
                     >4</span
                     >
                 </div>
-                <form>
+
                 <div class="mt-4 space-y-3">
                     <!-- Row -->
-
                     <?php
-
                     $Buyers=$repo->getUsersByRole('acheteur');
                     foreach ($Buyers as $buyer):
                     ?>
-
+                    <form method="post">
 
                     <div
                         class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
@@ -238,109 +253,18 @@ $repo = new UserRepository(Database::getConnection());
 
                         <div class="flex items-center gap-2">
                             <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500"><?= $buyer->getRole() ?></span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><?= $buyer->getStatus() ?></span>
+                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><button name="action" value="<?php echo $buyer->getStatus()=='active'?   'ban'   :  'active';?>"><?= $buyer->getStatus() ?> </button></span>
                         </div>
+
+                        <input type="hidden" name="user_id" value="<?= $buyer->getId() ?>">
                     </div>
+                        </form>
                     <?php
                     endforeach;
                     ?>
 
-                    <!-- Row -->
-<!--                    <div-->
-<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
-<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
-<!--                       transition hover:border-brand-500/20"-->
-<!--                    >-->
-<!--                        <div class="flex items-center gap-3">-->
-<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
-<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
-<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
-<!--                                </svg>-->
-<!--                            </div>-->
-<!--                            <div>-->
-<!--                                <div class="text-sm font-semibold text-white">Maria Garcia</div>-->
-<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
-<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
-<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
-<!--                                    </svg>-->
-<!--                                    maria@example.com-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!---->
-<!--                        <div class="flex items-center gap-2">-->
-<!--                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>-->
-<!--                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!---->
-                    <!-- Row -->
-<!--                    <div-->
-<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
-<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
-<!--                       transition hover:border-brand-500/20"-->
-<!--                    >-->
-<!--                        <div class="flex items-center gap-3">-->
-<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
-<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
-<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
-<!--                                </svg>-->
-<!--                            </div>-->
-<!--                            <div>-->
-<!--                                <div class="text-sm font-semibold text-white">Carlos Martinez</div>-->
-<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
-<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
-<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
-<!--                                    </svg>-->
-<!--                                    carlos@example.com-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!---->
-<!--                        <div class="flex items-center gap-2">-->
-<!--                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>-->
-<!--                            <span class="rounded-full border border-danger-500/25 bg-danger-500/10 px-3 py-1 text-xs text-danger-500"-->
-<!--                            >Disabled</span-->
-<!--                            >-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!---->
-                    <!-- Row -->
-<!--                    <div-->
-<!--                        class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4-->
-<!--                       shadow-[0_22px_55px_rgba(0,0,0,.45)]-->
-<!--                       transition hover:border-brand-500/20"-->
-<!--                    >-->
-<!--                        <div class="flex items-center gap-3">-->
-<!--                            <div class="grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/5 text-zinc-300">-->
-<!--                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                                    <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2" />-->
-<!--                                    <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
-<!--                                </svg>-->
-<!--                            </div>-->
-<!--                            <div>-->
-<!--                                <div class="text-sm font-semibold text-white">Anna Wilson</div>-->
-<!--                                <div class="mt-1 flex items-center gap-2 text-xs text-zinc-500">-->
-<!--                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">-->
-<!--                                        <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" />-->
-<!--                                        <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />-->
-<!--                                    </svg>-->
-<!--                                    anna@example.com-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!---->
-<!--                        <div class="flex items-center gap-2">-->
-<!--                            <span class="rounded-full border border-brand-500/25 bg-brand-500/10 px-3 py-1 text-xs text-brand-500">Buyer</span>-->
-<!--                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500">Active</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </div>
-                </form>
+
             </div>
 
             <!-- Organizers -->
@@ -364,6 +288,7 @@ $repo = new UserRepository(Database::getConnection());
                     $organizers = $repo->getUsersByRole('organisateur');
                     foreach ($organizers as $organizer):
                     ?>
+            <form method="post">
                     <div
                         class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 px-4 py-4
                        shadow-[0_22px_55px_rgba(0,0,0,.45)]
@@ -389,12 +314,15 @@ $repo = new UserRepository(Database::getConnection());
 
                         <div class="flex items-center gap-2">
                             <span class="rounded-full border border-purple-500/25 bg-purple-500/10 px-3 py-1 text-xs text-purple-500"><?= $organizer->getRole() ?></span>
-                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><?= $organizer->getStatus() ?></span>
+                            <span class="rounded-full border border-ok-500/25 bg-ok-500/10 px-3 py-1 text-xs text-ok-500"><button name="action" value="<?php echo $organizer->getStatus()=='active'?   'ban'   :  'active';?>" ><?= $organizer->getStatus() ?></button></span>
                         </div>
+                        <input type="hidden" name="user_id" value="<?= $organizer->getId() ?>">
                     </div>
+            </form>
                     <?php
                     endforeach;
                     ?>
+
 
                     <!-- Row -->
 <!--                    <div-->

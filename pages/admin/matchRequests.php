@@ -120,8 +120,8 @@ $matchList = $repo->pendingMatches();
                 </a>
                 <a
                     class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="/buymatch/pages/signUp.php"
-                >Register</a
+                    href="/buymatch/pages/admin/dashboard.php"
+                >Dashboard</a
                 >
             </nav>
 
@@ -144,8 +144,8 @@ $matchList = $repo->pendingMatches();
                 <a class="hover:text-white transition" href="/buymatch/pages/login.php">Login</a>
                 <a
                     class="mt-1 inline-flex justify-center rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
-                    href="/buymatch/pages/signUp.php"
-                >Register</a
+                    href="/buymatch/pages/admin/dashboard.php"
+                >Dashboard</a
                 >
             </div>
         </div>

@@ -98,5 +98,14 @@ class userRepository
         $stmt = $this->con->prepare($query);
         $stmt->execute(array($user->getName(),$user->getEmail(),$user->getPasswordHash(),$user->getPhone(),$user->getStatus(),$user->getId()));
     }
+    public function updateStatus($id,$status)
+    {
+        $query = "UPDATE utilisateur set status = ? where id = ?";
+        $stmt = $this->con->prepare($query);
+       if(!$stmt->execute(array($status,$id))){
+           throw new Exception("something not working here $id , $status");
+       }
+
+    }
 
 }
