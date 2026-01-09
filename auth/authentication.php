@@ -30,7 +30,4 @@ class authentication
     }
 
 
-    public static function logout(): void{
-        session_destroy();
-    }
 }

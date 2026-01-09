@@ -15,10 +15,11 @@ require_once "../repo/CategoryRepository.php";
 require_once "../repo/userRepository.php";
 require_once "../repo/CommentRepository.php";
 require_once "../classes/GuardAuth.php";
+require_once "../classes/logout.php";
 
 GuardAuth::isLoggedIn();
 $userid = GuardAuth::getUserId();
-
+Logout::logout();
 
 
 $pdo = Database::getConnection();
@@ -129,6 +130,11 @@ $user = $userRepo->getUserById($userid);
 
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Home</a>
+                <a
+                        class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                        href="?action=logout"
+                >Log out</a
+                >
 
             </nav>
 
@@ -446,15 +452,7 @@ $user = $userRepo->getUserById($userid);
         </footer>
 
         <!-- Built with badge -->
-        <button
-            id="builtWith"
-            class="fixed bottom-6 right-6 z-50 rounded-xl border border-white/10 bg-zinc-950/70 px-4 py-2 text-xs text-zinc-200 shadow-lg backdrop-blur hover:bg-zinc-900/70 transition"
-            type="button"
-        >
-            Built with <span aria-hidden="true">♥</span>
-            <span class="ml-1 text-brand-500 font-semibold">Tailwind</span>
-            <span class="ml-2 text-zinc-400">×</span>
-        </button>
+            
     </main>
 </div>
 

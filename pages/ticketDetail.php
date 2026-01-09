@@ -400,15 +400,7 @@ try {
         </footer>
 
         <!-- Built with badge -->
-        <button
-            id="builtWith"
-            class="fixed bottom-6 right-6 z-50 rounded-xl border border-white/10 bg-zinc-950/70 px-4 py-2 text-xs text-zinc-200 shadow-lg backdrop-blur hover:bg-zinc-900/70 transition"
-            type="button"
-        >
-            Built with <span aria-hidden="true">♥</span>
-            <span class="ml-1 text-brand-500 font-semibold">Tailwind</span>
-            <span class="ml-2 text-zinc-400">×</span>
-        </button>
+            
     </main>
 </div>
 

@@ -157,4 +157,29 @@ class MatchRepository
             $stmt->execute();
             return $stmt->fetchColumn();
         }
+
+
+        public function getMatchofMonth($month){
+            $query = "select * from list_match where month(match_date) = ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array($month));
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $matchesList =[];
+            foreach ($rows as $row) {
+                $matchSum =MatchSummary::fromRows($row);
+                $matchesList[] = $matchSum;
+            }
+            return $matchesList;
+        }
+        public function getMonths(){
+            $query = "select distinct month(match_date) as month from matches";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $months=[];
+                foreach ($rows as $row) {
+                    $months[]=$row['month'];
+                }
+                return $months;
+        }
 }
