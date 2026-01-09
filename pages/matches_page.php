@@ -1,4 +1,5 @@
 <?php
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -97,14 +98,27 @@ $repo = new MatchRepository(Database::getConnection());
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="#home">Home</a>
                 <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
-                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/login.php">
-                    <span aria-hidden="true">↗</span> Login
-                </a>
-                <a
+
+                <a class="inline-flex items-center gap-2 hover:text-white transition"
+                <?php if(isset($_SESSION['id'])) {
+                    echo 'href="/buymatch/pages/editProfile.php"><span aria-hidden="true">↗</span> Edit Profile </a>
+<a
+                        class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                        href="/buymatch/pages/tickets.php"
+                >MyTickets</a
+                >';
+                }
+                else {
+                    echo 'href="/buymatch/pages/login.php"><span aria-hidden="true">↗</span> Login </a>
+<a
                         class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
                         href="/buymatch/pages/signUp.php"
                 >Register</a
-                >
+                >';
+                }
+                ?>
+
+
             </nav>
 
             <button

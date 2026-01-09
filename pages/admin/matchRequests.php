@@ -4,8 +4,10 @@ require_once "../../classes/GuardAuth.php";
 require_once "../../classes/MatchSummary.php";
 require_once "../../config/database.php";
 require_once "../../repo/MatchRepository.php";
+require_once "../../repo/userRepository.php";
 GuardAuth::requireRole('administrateur');
-$repo= new MatchRepository(Database::getConnection());
+$pdo = Database::getConnection();
+$repo= new MatchRepository($pdo);
 
 
 try{
@@ -113,8 +115,8 @@ $matchList = $repo->pendingMatches();
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="#home">Home</a>
                 <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
-                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/login.php">
-                    <span aria-hidden="true">↗</span> Login
+                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/editProfile.php">
+                    <span aria-hidden="true">↗</span> Edit Profile
                 </a>
                 <a
                     class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
@@ -154,7 +156,7 @@ $matchList = $repo->pendingMatches();
         <section class="mx-auto max-w-6xl px-4 py-10 md:py-14">
             <!-- Back -->
             <a
-                href="#"
+                href="/buymatch/pages/admin/dashboard.php"
                 class="inline-flex items-center gap-2 text-sm text-zinc-300 transition hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/25 rounded-lg px-2 py-1"
             >
                 <span class="text-zinc-400" aria-hidden="true">←</span>
@@ -208,14 +210,14 @@ $matchList = $repo->pendingMatches();
                                 class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200"
                                 title="AC Milan"
                             >
-                                ACM
+                                <img src="/buymatch/uploads/<?= $match->getTeam1Logo() ?>">
                             </div>
                             <div class="font-display text-brand-500 text-lg tracking-widest">VS</div>
                             <div
                                 class="grid h-12 w-12 place-items-center rounded-full bg-zinc-900/55 ring-1 ring-white/15 text-zinc-200"
                                 title="Inter Milan"
                             >
-                                INT
+                                <img src="/buymatch/uploads/<?= $match->getTeam2Logo() ?>">
                             </div>
                         </div>
 
@@ -252,7 +254,11 @@ $matchList = $repo->pendingMatches();
                         <path d="M20 21a8 8 0 1 0-16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                       </svg>
                     </span>
-                                Organizer: Premier Sports Events
+                                Organizer: <?php
+                                $UserRepo = new userRepository($pdo);
+                                $organizer = $UserRepo->getUserById($match->getOrganizerId());
+                                echo $organizer->getName();
+                                ?>
                             </div>
                         </div>
 

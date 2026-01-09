@@ -149,10 +149,10 @@ try {
             </a>
 
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
-                <a class="hover:text-white transition" href="#home">Home</a>
+                <a class="hover:text-white transition" href="/buymatch/pages/organizer/dashboard.php">Home</a>
                 <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
-                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/login.php">
-                    <span aria-hidden="true">↗</span> Login
+                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/editProfile.php">
+                    <span aria-hidden="true">↗</span> edit Profile
                 </a>
                 <a class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition" href="/buymatch/pages/signUp.php"
                 >Register</a

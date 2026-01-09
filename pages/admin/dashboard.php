@@ -109,8 +109,8 @@ GuardAuth::requireRole('administrateur');
             <nav class="hidden items-center gap-8 text-sm text-zinc-300 md:flex">
                 <a class="hover:text-white transition" href="#home">Home</a>
                 <a class="hover:text-white transition" href="/buymatch/pages/matches_page.php">Matches</a>
-                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/login.php">
-                    <span aria-hidden="true">↗</span> Login
+                <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/editProfile.php">
+                    <span aria-hidden="true">↗</span> edit Profile
                 </a>
                 <a
                     class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 hover:bg-brand-600 transition"
@@ -301,7 +301,7 @@ GuardAuth::requireRole('administrateur');
                         <div>
                             <div class="text-xs text-zinc-300">Pending Requests</div>
                             <div class="mt-1 font-display text-3xl text-white"><?= $matchRepo->countPendingMatches() ?></div>
-                            <a href="#" class="mt-2 inline-flex items-center gap-2 text-xs text-red-300 hover:text-red-200 transition">
+                            <a href="/buymatch/pages/admin/matchRequests.php" class="mt-2 inline-flex items-center gap-2 text-xs text-red-300 hover:text-red-200 transition">
                                 Review Now <span aria-hidden="true">→</span>
                             </a>
                         </div>
@@ -318,7 +318,7 @@ GuardAuth::requireRole('administrateur');
             <!-- Action panels -->
             <div class="mt-10 grid gap-4 md:grid-cols-2">
                 <a
-                    href="#"
+                    href="/buymatch/pages/admin/matchRequests.php"
                     class="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6
                      transition hover:-translate-y-[1px] hover:border-brand-500/25 hover:shadow-[0_0_0_1px_rgba(255,122,0,.12),0_22px_55px_rgba(0,0,0,.55)]
                      focus:outline-none focus:ring-2 focus:ring-brand-500/25"
@@ -335,7 +335,7 @@ GuardAuth::requireRole('administrateur');
                 </a>
 
                 <a
-                    href="#"
+                    href="/buymatch/pages/admin/usersManagement.php"
                     class="group rounded-2xl border border-white/10 bg-gradient-to-b from-white/6 to-white/3 p-6
                      transition hover:-translate-y-[1px] hover:border-brand-500/25 hover:shadow-[0_0_0_1px_rgba(255,122,0,.12),0_22px_55px_rgba(0,0,0,.55)]
                      focus:outline-none focus:ring-2 focus:ring-brand-500/25"

@@ -108,8 +108,9 @@ $user_id = GuardAuth::getUserId();
                 <a class="inline-flex items-center gap-2 hover:text-white transition" href="/buymatch/pages/editProfile.php">
                     <span aria-hidden="true">↗</span> Profile
                 </a>
-                <a class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition" href="/buymatch/pages/signUp.php"
-                >Register</a
+                <a class="rounded-lg bg-brand-500 px-4 py-2 font-semibold text-zinc-950 shadow-glow hover:bg-brand-600 transition"
+                   href="/buymatch/pages/tickets.php"
+                >myTickets</a
                 >
             </nav>
 
